@@ -20,8 +20,7 @@ namespace Mariottide
     }
     public enum PointSystem
     {
-        F1, Linear,Gpro,
-        Quaranta
+        F1, Linear, Gpro, Quaranta
     }
     public enum TipoClassifica
     {
@@ -239,7 +238,7 @@ namespace Mariottide
 
             return (prox, prev);
         }
-        private async Task<DbRaceSummary> GetRaceData(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate, DateTime? prevRaceDate )
+        private async Task<DbRaceSummary> GetRaceData(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate, DateTime? prevRaceDate)
         {
             var race = await _dbRepository.ReadLastRace(category.ToString(), tipoClassifica.ToString());
 
@@ -251,14 +250,14 @@ namespace Mariottide
 
             return race;
         }
-        private bool ShouldFetchNewRace(DbRaceSummary race, DateTime? proxRaceDate, DateTime? prevRaceDate )
+        private bool ShouldFetchNewRace(DbRaceSummary race, DateTime? proxRaceDate, DateTime? prevRaceDate)
         {
             return (race == null || !race.Managers.Any()) || ((proxRaceDate > DateTime.Today && prevRaceDate < DateTime.Today && race.Downloaded < prevRaceDate));
         }
         private async Task<DbRaceSummary> FetchAndProcessNewRace(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate)
         {
             _apiRequestGpro.Autenticazione(_token);
-            var apiRace = await _apiRequestGpro.GetApiAsync<RaceSummary>( UrlBase.urlBaseRaceSummary, category.ToString());
+            var apiRace = await _apiRequestGpro.GetApiAsync<RaceSummary>(UrlBase.urlBaseRaceSummary, category.ToString());
 
             var race = MapToDbRace(apiRace, category.ToString());
             race = FiltraPerNatzionalita(race, tipoClassifica);
