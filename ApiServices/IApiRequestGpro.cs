@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Mariottide
+namespace ApiServices
 {
     public interface IApiRequestGpro
     {

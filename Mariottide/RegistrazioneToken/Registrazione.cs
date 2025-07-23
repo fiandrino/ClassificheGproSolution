@@ -1,6 +1,7 @@
 ﻿using Spectre.Console;
 using System.IO;
 using System;
+using Localizations;
 
 namespace Mariottide
 {

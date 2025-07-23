@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Mariottide
+﻿namespace ApiServices
 {
     public static class UrlBase
     {

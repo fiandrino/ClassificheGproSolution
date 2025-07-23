@@ -5,17 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mariottide
+namespace DbServices
 {
 
     public static class DbContextFactory
     {
-        public static IRacingContext CreateContext(TipoClassifica tipoClassifica)
+        public static IRacingContext CreateContext(string tipoClassifica)
         {
             return tipoClassifica switch
             {
-                TipoClassifica.it => new DbItalianContext(),
-                TipoClassifica.all => new DbGlobalContext(),
+               "it" => new DbItalianContext(),
+               "all" => new DbGlobalContext(),
                 _ => throw new ArgumentException("Tipo classifica non supportato")
             };
         }

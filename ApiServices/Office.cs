@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mariottide
+namespace ApiServices
 {
     public class Office
     {

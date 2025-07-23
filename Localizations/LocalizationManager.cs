@@ -1,9 +1,8 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
 using System.Resources;
 
-namespace Mariottide
+namespace Localizations
 {
     public class LocalizationManager : ILocalizationManager
     {
@@ -13,7 +12,7 @@ namespace Mariottide
         public LocalizationManager()
         {
             // Namespace + nome base dei file di risorse
-            string baseName = "Mariottide.Resources.Strings";
+            string baseName = "Localizations.Resources.Strings";
             _resourceManager = new ResourceManager(baseName, Assembly.GetExecutingAssembly());
 
             // Imposta cultura predefinita (italiano)

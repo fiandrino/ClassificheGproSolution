@@ -5,6 +5,8 @@ using System.Linq;
 using Spectre.Console;
 using System.Net;
 using System.Text.RegularExpressions;
+using DbServices;
+using Localizations;
 
 namespace Mariottide
 {

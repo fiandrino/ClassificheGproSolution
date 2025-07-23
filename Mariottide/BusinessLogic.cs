@@ -6,7 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using ApiServices;
+using DbServices;
+using Localizations;
 using Spectre.Console;
+using Calendar = ApiServices.Calendar;
 
 namespace Mariottide
 {
@@ -195,7 +199,7 @@ namespace Mariottide
         }
         private async Task<DbOffice> InitializeOffice(TipoClassifica tipoClassifica)
         {
-            var dbOffice = await _dbRepository.ReadOffice(tipoClassifica);
+            var dbOffice = await _dbRepository.ReadOffice(tipoClassifica.ToString());
             if (dbOffice != null)
             {
                 return dbOffice;
@@ -203,19 +207,19 @@ namespace Mariottide
             _apiRequestGpro.Autenticazione(_token);
             var office = await _apiRequestGpro.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
             dbOffice = MapToDbOffice(office);
-            await _dbRepository.SaveOffice(dbOffice, tipoClassifica);
+            await _dbRepository.SaveOffice(dbOffice, tipoClassifica.ToString());
 
             return dbOffice;
         }
         private async Task<DbCalendar> InitializeCalendar(TipoClassifica tipoClassifica)
         {
-            var dbCalendar = await _dbRepository.ReadCalendar(tipoClassifica);
+            var dbCalendar = await _dbRepository.ReadCalendar(tipoClassifica.ToString());
             if (dbCalendar != null) return dbCalendar;
             _apiRequestGpro.Autenticazione(_token);
             var calendar = await _apiRequestGpro.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
             calendar = FilterRaceEvents(calendar);
             dbCalendar = MapToDbCalendar(calendar);
-            await _dbRepository.SaveCalendar(dbCalendar, tipoClassifica);
+            await _dbRepository.SaveCalendar(dbCalendar, tipoClassifica.ToString());
 
             return dbCalendar;
         }
@@ -237,12 +241,12 @@ namespace Mariottide
         }
         private async Task<DbRaceSummary> GetRaceData(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate, DateTime? prevRaceDate )
         {
-            var race = await _dbRepository.ReadLastRace(category.ToString(), tipoClassifica);
+            var race = await _dbRepository.ReadLastRace(category.ToString(), tipoClassifica.ToString());
 
             if (ShouldFetchNewRace(race, proxRaceDate, prevRaceDate))
             {
                 race = await FetchAndProcessNewRace(category, tipoClassifica, proxRaceDate);
-                await _dbRepository.SaveRaceSummary(race, race.Managers, tipoClassifica);
+                await _dbRepository.SaveRaceSummary(race, race.Managers, tipoClassifica.ToString());
             }
 
             return race;
@@ -263,7 +267,7 @@ namespace Mariottide
             var puntiManagersStagione = await _dbRepository.SommaPuntiGare(
                 race.Season,
                 category.ToString(),
-                tipoClassifica);
+                tipoClassifica.ToString());
 
             return AssegnaPunti(race, PointSystem.F1, puntiManagersStagione);
         }

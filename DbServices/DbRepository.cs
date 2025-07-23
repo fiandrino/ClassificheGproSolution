@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Mariottide
+namespace DbServices
 {
     public class DbRepository : IDbRepository
     {
         // Legge il calendario dal database
-        public async Task<DbCalendar> ReadCalendar(TipoClassifica tipoClassifica)
+        public async Task<DbCalendar> ReadCalendar(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             await context.Database.EnsureCreatedAsync();
@@ -23,7 +23,7 @@ namespace Mariottide
                 .FirstOrDefaultAsync();
         }
         // Legge l'ultima gara salvata nel database per una categoria
-        public async Task<DbRaceSummary> ReadLastRace(string category, TipoClassifica tipoClassifica)
+        public async Task<DbRaceSummary> ReadLastRace(string category, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
 
@@ -56,13 +56,13 @@ namespace Mariottide
             }
         }
         //Legge Office
-        public async Task<DbOffice> ReadOffice(TipoClassifica tipoClassifica)
+        public async Task<DbOffice> ReadOffice(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             await context.Database.EnsureCreatedAsync();
             return await context.DbOffice.FirstOrDefaultAsync();
         }
-        public async Task ClearOfficeData(TipoClassifica tipoClassifica)
+        public async Task ClearOfficeData(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             var allOffices = await context.DbOffice.ToListAsync();
@@ -70,7 +70,7 @@ namespace Mariottide
             await context.SaveChangesAsync();
         }
         //Salva Office
-        public async Task SaveOffice(DbOffice dbOffice, TipoClassifica tipoClassifica)
+        public async Task SaveOffice(DbOffice dbOffice, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             var existingOffice = await context.DbOffice.FirstOrDefaultAsync(r => r.NextSeasonResetDate == dbOffice.NextSeasonResetDate);
@@ -81,7 +81,7 @@ namespace Mariottide
             }
         }
         // Salva i risultati di una gara nel database
-        public async Task SaveRaceSummary(DbRaceSummary dbrace, List<DbManager> orderedManagers, TipoClassifica tipoClassifica)
+        public async Task SaveRaceSummary(DbRaceSummary dbrace, List<DbManager> orderedManagers, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             // Cerca una gara esistente con la stessa stagione e numero gara
@@ -119,7 +119,7 @@ namespace Mariottide
             await context.SaveChangesAsync();
         }
         // Salva il calendario nel database
-        public async Task SaveCalendar(DbCalendar dbCalendar, TipoClassifica tipoClassifica)
+        public async Task SaveCalendar(DbCalendar dbCalendar, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             await context.Database.EnsureCreatedAsync();
@@ -127,7 +127,7 @@ namespace Mariottide
             await context.SaveChangesAsync();
         }
         // Nuovo metodo per recuperare i punti stagionali
-        public async Task<Dictionary<int, int>> SommaPuntiGare(int season, string category, TipoClassifica tipoClassifica)
+        public async Task<Dictionary<int, int>> SommaPuntiGare(int season, string category, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
 

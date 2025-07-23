@@ -117,92 +117,32 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="DownloadManager" xml:space="preserve">
-    <value>Descargando datos de managers de Gpro para la categoría especificada</value>
+  <data name="BestPitStop" xml:space="preserve">
+    <value>MEJOR PIT</value>
   </data>
-  <data name="GaraPrec" xml:space="preserve">
-    <value>Fecha carrera anterior:</value>
-  </data>
-  <data name="GaraProx" xml:space="preserve">
-    <value>Fecha próxima carrera:</value>
-  </data>
-  <data name="InitCalendar" xml:space="preserve">
-    <value>Inicializando calendario de temporada:</value>
-  </data>
-  <data name="ReadSavedRace" xml:space="preserve">
-    <value>Leyendo última carrera guardada...</value>
-  </data>
-  <data name="SaveData" xml:space="preserve">
-    <value>Guardando datos en la base de datos</value>
-  </data>
-  <data name="ClassificaStagionale" xml:space="preserve">
-    <value>CLASIFICACIÓN DE TEMPORADA</value>
-  </data>
-  <data name="ClassificaMondiale" xml:space="preserve">
-    <value>MUNDIAL</value>
-  </data>
-  <data name="ClassificaItaliana" xml:space="preserve">
-    <value>ITALIANA</value>
-  </data>
-  <data name="NessunaClassifica" xml:space="preserve">
-    <value>NINGUNA</value>
+  <data name="CancelSelection" xml:space="preserve">
+    <value>Cancelar</value>
   </data>
   <data name="Categoria" xml:space="preserve">
     <value>CATEGORÍA</value>
   </data>
-  <data name="Stagione" xml:space="preserve">
-    <value>TEMPORADA</value>
-  </data>
-  <data name="Gara" xml:space="preserve">
-    <value>CARRERA</value>
+  <data name="ChooseOption" xml:space="preserve">
+    <value>Elija una opción</value>
   </data>
   <data name="Circuito" xml:space="preserve">
     <value>CIRCUITO</value>
   </data>
-  <data name="Posizione" xml:space="preserve">
-    <value>POS</value>
-  </data>
-  <data name="Pilota" xml:space="preserve">
-    <value>PILOTO</value>
-  </data>
-  <data name="PosizioneR" xml:space="preserve">
-    <value>POS.R</value>
-  </data>
-  <data name="Punti" xml:space="preserve">
-    <value>PTOS</value>
-  </data>
-  <data name="PuntiTotali" xml:space="preserve">
-    <value>TOT</value>
-  </data>
-  <data name="Gomme" xml:space="preserve">
-    <value>NEUMÁTICOS</value>
-  </data>
-  <data name="TempoGara" xml:space="preserve">
-    <value>TIEMPO DE CARRERA</value>
-  </data>
-  <data name="GiroVeloce" xml:space="preserve">
-    <value>VUELTA RÁPIDA</value>
-  </data>
-  <data name="VelocitaMedia" xml:space="preserve">
-    <value>VEL MEDIA</value>
-  </data>
-  <data name="PitStop" xml:space="preserve">
-    <value>PIT STOP</value>
-  </data>
-  <data name="PrimoPosto" xml:space="preserve">
-    <value>1°</value>
-  </data>
-  <data name="SecondoPosto" xml:space="preserve">
-    <value>2°</value>
-  </data>
-  <data name="TerzoPosto" xml:space="preserve">
-    <value>3°</value>
-  </data>
-  <data name="ClassificaTitolo" xml:space="preserve">
-    <value>SELECCIÓN DE CATEGORÍA DE CLASIFICACIÓN</value>
+  <data name="ClassificaErrore" xml:space="preserve">
+    <value>Elección no válida. Presione un número del 1 al 5.</value>
   </data>
   <data name="ClassificaIstruzione" xml:space="preserve">
     <value>Presione el número correspondiente:</value>
+  </data>
+  <data name="ClassificaItaliana" xml:space="preserve">
+    <value>ITALIANA</value>
+  </data>
+  <data name="ClassificaMondiale" xml:space="preserve">
+    <value>MUNDIAL</value>
   </data>
   <data name="ClassificaOpzione1" xml:space="preserve">
     <value>1) Rookie</value>
@@ -222,11 +162,182 @@
   <data name="ClassificaScelta" xml:space="preserve">
     <value>Elección:</value>
   </data>
-  <data name="ClassificaErrore" xml:space="preserve">
-    <value>Elección no válida. Presione un número del 1 al 5.</value>
+  <data name="ClassificaStagionale" xml:space="preserve">
+    <value>CLASIFICACIÓN DE TEMPORADA</value>
   </data>
-  <data name="TipoClassificaTitolo" xml:space="preserve">
-    <value>SELECCIÓN DE TIPO DE CLASIFICACIÓN</value>
+  <data name="ClassificaTitolo" xml:space="preserve">
+    <value>SELECCIÓN DE CATEGORÍA DE CLASIFICACIÓN</value>
+  </data>
+  <data name="DownloadManager" xml:space="preserve">
+    <value>Descargando datos de managers de Gpro para la categoría especificada</value>
+  </data>
+  <data name="DriverNotFound" xml:space="preserve">
+    <value>Piloto no encontrado</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>pilotos</value>
+  </data>
+  <data name="EditNewTokenPrompt" xml:space="preserve">
+    <value>Editar nuevo token:</value>
+  </data>
+  <data name="EditTokenOption" xml:space="preserve">
+    <value>Editar token</value>
+  </data>
+  <data name="EnterDriverNamePrompt" xml:space="preserve">
+    <value>Ingrese nombre del piloto</value>
+  </data>
+  <data name="ExitOption" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="ExitPagination" xml:space="preserve">
+    <value>Salir de la vista</value>
+  </data>
+  <data name="FirstPage" xml:space="preserve">
+    <value>Primera página</value>
+  </data>
+  <data name="Gara" xml:space="preserve">
+    <value>CARRERA</value>
+  </data>
+  <data name="GaraPrec" xml:space="preserve">
+    <value>Fecha carrera anterior:</value>
+  </data>
+  <data name="GaraProx" xml:space="preserve">
+    <value>Fecha próxima carrera:</value>
+  </data>
+  <data name="GetTokenInstructions" xml:space="preserve">
+    <value>Cómo obtener el token</value>
+  </data>
+  <data name="GiroVeloce" xml:space="preserve">
+    <value>VUELTA RÁPIDA</value>
+  </data>
+  <data name="Gomme" xml:space="preserve">
+    <value>NEUMÁTICOS</value>
+  </data>
+  <data name="GoodbyeMessage" xml:space="preserve">
+    <value>¡Adiós!</value>
+  </data>
+  <data name="HighlightedDriver" xml:space="preserve">
+    <value>Piloto destacado</value>
+  </data>
+  <data name="InitCalendar" xml:space="preserve">
+    <value>Inicializando calendario de temporada:</value>
+  </data>
+  <data name="InitCalendarLeggoDB" xml:space="preserve">
+    <value>Leyendo calendario de la base de datos...</value>
+  </data>
+  <data name="InitCalendarNessunCalendario" xml:space="preserve">
+    <value>No hay calendario, descargando de Gpro...</value>
+  </data>
+  <data name="InitCalendarSalvataggio" xml:space="preserve">
+    <value>Guardando calendario en la base de datos...</value>
+  </data>
+  <data name="InsertNewTokenPrompt" xml:space="preserve">
+    <value>Insertar nuevo token:</value>
+  </data>
+  <data name="InsertTokenOption" xml:space="preserve">
+    <value>Insertar token</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Última página</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Última actualización</value>
+  </data>
+  <data name="MainMenuExit" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="MainMenuTitle" xml:space="preserve">
+    <value>Menú principal</value>
+  </data>
+  <data name="MainMenuViewStandings" xml:space="preserve">
+    <value>Ver clasificaciones</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>MANAGER</value>
+  </data>
+  <data name="MultipleDriversFound" xml:space="preserve">
+    <value>Pilotos encontrados</value>
+  </data>
+  <data name="NessunaClassifica" xml:space="preserve">
+    <value>NINGUNA</value>
+  </data>
+  <data name="NessunDatoAggiornare" xml:space="preserve">
+    <value>No hay datos para actualizar hasta la próxima carrera del {0}</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Siguiente página</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>de</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Página</value>
+  </data>
+  <data name="PageNavigation" xml:space="preserve">
+    <value>Navegación de página</value>
+  </data>
+  <data name="Pilota" xml:space="preserve">
+    <value>PILOTO</value>
+  </data>
+  <data name="PitStop" xml:space="preserve">
+    <value>PIT STOP</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Posición</value>
+  </data>
+  <data name="Posizione" xml:space="preserve">
+    <value>POS</value>
+  </data>
+  <data name="PosizioneR" xml:space="preserve">
+    <value>POS.R</value>
+  </data>
+  <data name="PressAnyKey" xml:space="preserve">
+    <value>[grey]Presiona cualquier tecla para continuar...[/]</value>
+  </data>
+  <data name="PreviousPage" xml:space="preserve">
+    <value>Página anterior</value>
+  </data>
+  <data name="PrimoPosto" xml:space="preserve">
+    <value>1°</value>
+  </data>
+  <data name="Punti" xml:space="preserve">
+    <value>PTOS</value>
+  </data>
+  <data name="PuntiTotali" xml:space="preserve">
+    <value>TOT</value>
+  </data>
+  <data name="ReadSavedRace" xml:space="preserve">
+    <value>Leyendo última carrera guardada...</value>
+  </data>
+  <data name="SaveData" xml:space="preserve">
+    <value>Guardando datos en la base de datos</value>
+  </data>
+  <data name="SearchDriver" xml:space="preserve">
+    <value>Buscar piloto</value>
+  </data>
+  <data name="SecondoPosto" xml:space="preserve">
+    <value>2°</value>
+  </data>
+  <data name="SelectDriverPrompt" xml:space="preserve">
+    <value>Seleccione un piloto:</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Fuente</value>
+  </data>
+  <data name="Stagione" xml:space="preserve">
+    <value>TEMPORADA</value>
+  </data>
+  <data name="StampaDatiAggiornati" xml:space="preserve">
+    <value>Imprimiré los datos solicitados actualizados hasta la carrera del {0}</value>
+  </data>
+  <data name="TempoGara" xml:space="preserve">
+    <value>TIEMPO DE CARRERA</value>
+  </data>
+  <data name="TerzoPosto" xml:space="preserve">
+    <value>3°</value>
+  </data>
+  <data name="TipoClassificaErrore" xml:space="preserve">
+    <value>Elección no válida. Presione 1 o 2.</value>
   </data>
   <data name="TipoClassificaIstruzione" xml:space="preserve">
     <value>Presione el número correspondiente:</value>
@@ -240,122 +351,17 @@
   <data name="TipoClassificaScelta" xml:space="preserve">
     <value>Elección:</value>
   </data>
-  <data name="TipoClassificaErrore" xml:space="preserve">
-    <value>Elección no válida. Presione 1 o 2.</value>
+  <data name="TipoClassificaTitolo" xml:space="preserve">
+    <value>SELECCIÓN DE TIPO DE CLASIFICACIÓN</value>
   </data>
-  <data name="NessunDatoAggiornare" xml:space="preserve">
-    <value>No hay datos para actualizar hasta la próxima carrera del {0}</value>
-  </data>
-  <data name="StampaDatiAggiornati" xml:space="preserve">
-    <value>Imprimiré los datos solicitados actualizados hasta la carrera del {0}</value>
-  </data>
-  <data name="InitCalendarLeggoDB" xml:space="preserve">
-    <value>Leyendo calendario de la base de datos...</value>
-  </data>
-  <data name="InitCalendarNessunCalendario" xml:space="preserve">
-    <value>No hay calendario, descargando de Gpro...</value>
-  </data>
-  <data name="InitCalendarSalvataggio" xml:space="preserve">
-    <value>Guardando calendario en la base de datos...</value>
-  </data>
-  <data name="BestPitStop" xml:space="preserve">
-    <value>MEJOR PIT</value>
-  </data>
-  <data name="ChooseOption" xml:space="preserve">
-    <value>Elija una opción</value>
-  </data>
-  <data name="InsertTokenOption" xml:space="preserve">
-    <value>Insertar token</value>
-  </data>
-  <data name="EditTokenOption" xml:space="preserve">
-    <value>Editar token</value>
-  </data>
-  <data name="ExitOption" xml:space="preserve">
-    <value>Salir</value>
-  </data>
-  <data name="InsertNewTokenPrompt" xml:space="preserve">
-    <value>Insertar nuevo token:</value>
-  </data>
-  <data name="EditNewTokenPrompt" xml:space="preserve">
-    <value>Editar nuevo token:</value>
+  <data name="TokenInstructionsTitle" xml:space="preserve">
+    <value>Instrucciones para obtener el token de GPRO</value>
   </data>
   <data name="TokenSavedSuccess" xml:space="preserve">
     <value>¡Token guardado correctamente!</value>
   </data>
-  <data name="NextPage" xml:space="preserve">
-    <value>Siguiente página</value>
-  </data>
-  <data name="PreviousPage" xml:space="preserve">
-    <value>Página anterior</value>
-  </data>
-  <data name="ExitPagination" xml:space="preserve">
-    <value>Salir de la vista</value>
-  </data>
-  <data name="PageNavigation" xml:space="preserve">
-    <value>Navegación de página</value>
-  </data>
-  <data name="Page" xml:space="preserve">
-    <value>Página</value>
-  </data>
-  <data name="Of" xml:space="preserve">
-    <value>de</value>
-  </data>
-  <data name="Drivers" xml:space="preserve">
-    <value>pilotos</value>
-  </data>
-  <data name="LastUpdate" xml:space="preserve">
-    <value>Última actualización</value>
-  </data>
-  <data name="Source" xml:space="preserve">
-    <value>Fuente</value>
-  </data>
-  <data name="MainMenuTitle" xml:space="preserve">
-    <value>Menú principal</value>
-  </data>
-  <data name="MainMenuViewStandings" xml:space="preserve">
-    <value>Ver clasificaciones</value>
-  </data>
-  <data name="MainMenuExit" xml:space="preserve">
-    <value>Salir</value>
-  </data>
-  <data name="GoodbyeMessage" xml:space="preserve">
-    <value>¡Adiós!</value>
-  </data>
-  <data name="FirstPage" xml:space="preserve">
-    <value>Primera página</value>
-  </data>
-  <data name="LastPage" xml:space="preserve">
-    <value>Última página</value>
-  </data>
-  <data name="SearchDriver" xml:space="preserve">
-    <value>Buscar piloto</value>
-  </data>
-  <data name="EnterDriverNamePrompt" xml:space="preserve">
-    <value>Ingrese nombre del piloto</value>
-  </data>
-  <data name="DriverNotFound" xml:space="preserve">
-    <value>Piloto no encontrado</value>
-  </data>
-  <data name="HighlightedDriver" xml:space="preserve">
-    <value>Piloto destacado</value>
-  </data>
-  <data name="MultipleDriversFound" xml:space="preserve">
-    <value>Pilotos encontrados</value>
-  </data>
-  <data name="SelectDriverPrompt" xml:space="preserve">
-    <value>Seleccione un piloto:</value>
-  </data>
-  <data name="Position" xml:space="preserve">
-    <value>Posición</value>
-  </data>
-  <data name="CancelSelection" xml:space="preserve">
-    <value>Cancelar</value>
-  </data>
-  <data name="GetTokenInstructions" xml:space="preserve">
-    <value>Cómo obtener el token</value>
-  </data>
-  <data name="TokenInstructionsTitle" xml:space="preserve">
-    <value>Instrucciones para obtener el token de GPRO</value>
+  <data name="TokenSecurityWarning" xml:space="preserve">
+    <value>¡Mantén este token en secreto como si fuera una contraseña!</value>
   </data>
   <data name="TokenStep1" xml:space="preserve">
     <value>Inicia sesión en tu cuenta en [link]https://www.gpro.net[/]</value>
@@ -369,13 +375,7 @@
   <data name="TokenStep4" xml:space="preserve">
     <value>Copia el token de autorización</value>
   </data>
-  <data name="TokenSecurityWarning" xml:space="preserve">
-    <value>¡Mantén este token en secreto como si fuera una contraseña!</value>
-  </data>
-  <data name="PressAnyKey" xml:space="preserve">
-    <value>[grey]Presiona cualquier tecla para continuar...[/]</value>
-  </data>
-  <data name="Manager" xml:space="preserve">
-    <value>MANAGER</value>
+  <data name="VelocitaMedia" xml:space="preserve">
+    <value>VEL MEDIA</value>
   </data>
 </root>

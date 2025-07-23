@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace Mariottide
+namespace DbServices
 {
     public interface IRacingContext : IDisposable
     {

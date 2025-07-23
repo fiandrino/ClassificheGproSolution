@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
-namespace Mariottide
+
+namespace DbServices
 {
     public class DbOffice
     {

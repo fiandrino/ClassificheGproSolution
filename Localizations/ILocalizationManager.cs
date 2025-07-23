@@ -1,4 +1,4 @@
-﻿namespace Mariottide
+﻿namespace Localizations
 {
     public interface ILocalizationManager
     {
