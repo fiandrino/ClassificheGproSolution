@@ -1,0 +1,33 @@
+﻿git fetch -all 
+- Scarica tutti gli aggiornamenti da tutti i repository remoti collegati al tuo progetto
+- Ricevi gli aggiornamenti, ma non li pubblichi ancora sul tuo locale.
+
+git checkout -B master origin/master --force
+ - git checkout	//Comando base per cambiare ramo o ripristinare file.
+ - -B (maiuscolo): Crea un nuovo ramo o resetta un ramo esistente se già presente.
+ - Nome del ramo su cui operare.
+ - origin/master: Punto di partenza (il ramo master su GitHub).
+ - --force: Forza l'operazione ignorando avvertimenti e conflitti.
+
+ git clean -fd
+  - clean: Rimuove file non tracciati
+  - -f (force): Obbligatorio per eseguire l'operazione (senza non funziona)
+  - -d: Rimuove anche le directory non tracciate
+  - -n  Mostra cosa verrebbe cancellato SENZA eseguire
+
+ git branch -a
+  - branch: Mostra l'elenco dei rami
+  - -a (all): Mostra sia i rami locali che quelli remoti
+
+  dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+  dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -p:PublishTrimmed=true
+  dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true
+
+  Windows 64-bit: win-x64
+  Windows 32-bit: win-x86
+  Linux 64-bit: linux-x64
+  macOS 64-bit: osx-x64
+  macOS ARM (Apple Silicon): osx-arm64
+
+
+	

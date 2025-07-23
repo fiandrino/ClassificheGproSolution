@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DownloadManager" xml:space="preserve">
+    <value>Lade Manager-Daten von Gpro für die angegebene Kategorie</value>
+  </data>
+  <data name="GaraPrec" xml:space="preserve">
+    <value>Datum vorheriges Rennen:</value>
+  </data>
+  <data name="GaraProx" xml:space="preserve">
+    <value>Datum nächstes Rennen:</value>
+  </data>
+  <data name="InitCalendar" xml:space="preserve">
+    <value>Initialisiere Saisonkalender:</value>
+  </data>
+  <data name="ReadSavedRace" xml:space="preserve">
+    <value>Lese letztes gespeichertes Rennen...</value>
+  </data>
+  <data name="SaveData" xml:space="preserve">
+    <value>Speichere Daten in der Datenbank</value>
+  </data>
+  <data name="ClassificaStagionale" xml:space="preserve">
+    <value>SAISONWERTUNG</value>
+  </data>
+  <data name="ClassificaMondiale" xml:space="preserve">
+    <value>WELTMEISTERSCHAFT</value>
+  </data>
+  <data name="ClassificaItaliana" xml:space="preserve">
+    <value>ITALIENISCH</value>
+  </data>
+  <data name="NessunaClassifica" xml:space="preserve">
+    <value>KEINE</value>
+  </data>
+  <data name="Categoria" xml:space="preserve">
+    <value>KATEGORIE</value>
+  </data>
+  <data name="Stagione" xml:space="preserve">
+    <value>SAISON</value>
+  </data>
+  <data name="Gara" xml:space="preserve">
+    <value>RENNEN</value>
+  </data>
+  <data name="Circuito" xml:space="preserve">
+    <value>STRECKEN</value>
+  </data>
+  <data name="Posizione" xml:space="preserve">
+    <value>POS</value>
+  </data>
+  <data name="Pilota" xml:space="preserve">
+    <value>FAHRER</value>
+  </data>
+  <data name="PosizioneR" xml:space="preserve">
+    <value>POS.R</value>
+  </data>
+  <data name="Punti" xml:space="preserve">
+    <value>PUNKTE</value>
+  </data>
+  <data name="PuntiTotali" xml:space="preserve">
+    <value>GES</value>
+  </data>
+  <data name="Gomme" xml:space="preserve">
+    <value>REIFEN</value>
+  </data>
+  <data name="TempoGara" xml:space="preserve">
+    <value>RENNZEIT</value>
+  </data>
+  <data name="GiroVeloce" xml:space="preserve">
+    <value>SCHNELLSTE RUNDE</value>
+  </data>
+  <data name="VelocitaMedia" xml:space="preserve">
+    <value>Ø GESCHW.</value>
+  </data>
+  <data name="PitStop" xml:space="preserve">
+    <value>BOXENSTOPP</value>
+  </data>
+  <data name="PrimoPosto" xml:space="preserve">
+    <value>1°</value>
+  </data>
+  <data name="SecondoPosto" xml:space="preserve">
+    <value>2°</value>
+  </data>
+  <data name="TerzoPosto" xml:space="preserve">
+    <value>3°</value>
+  </data>
+  <data name="ClassificaTitolo" xml:space="preserve">
+    <value>AUSWAHL DER WERTUNGSKATEGORIE</value>
+  </data>
+  <data name="ClassificaIstruzione" xml:space="preserve">
+    <value>Drücken Sie die entsprechende Nummer:</value>
+  </data>
+  <data name="ClassificaOpzione1" xml:space="preserve">
+    <value>1) Rookie</value>
+  </data>
+  <data name="ClassificaOpzione2" xml:space="preserve">
+    <value>2) Amateur</value>
+  </data>
+  <data name="ClassificaOpzione3" xml:space="preserve">
+    <value>3) Pro</value>
+  </data>
+  <data name="ClassificaOpzione4" xml:space="preserve">
+    <value>4) Master</value>
+  </data>
+  <data name="ClassificaOpzione5" xml:space="preserve">
+    <value>5) Elite</value>
+  </data>
+  <data name="ClassificaScelta" xml:space="preserve">
+    <value>Auswahl:</value>
+  </data>
+  <data name="ClassificaErrore" xml:space="preserve">
+    <value>Ungültige Auswahl. Bitte 1 bis 5 drücken.</value>
+  </data>
+  <data name="TipoClassificaTitolo" xml:space="preserve">
+    <value>AUSWAHL DER WERTUNGSART</value>
+  </data>
+  <data name="TipoClassificaIstruzione" xml:space="preserve">
+    <value>Drücken Sie die entsprechende Nummer:</value>
+  </data>
+  <data name="TipoClassificaOpzione1" xml:space="preserve">
+    <value>1) Italienisch</value>
+  </data>
+  <data name="TipoClassificaOpzione2" xml:space="preserve">
+    <value>2) Welt</value>
+  </data>
+  <data name="TipoClassificaScelta" xml:space="preserve">
+    <value>Auswahl:</value>
+  </data>
+  <data name="TipoClassificaErrore" xml:space="preserve">
+    <value>Ungültige Auswahl. Bitte 1 oder 2 drücken.</value>
+  </data>
+  <data name="NessunDatoAggiornare" xml:space="preserve">
+    <value>Keine Daten zum Aktualisieren bis zum nächsten Rennen am {0}</value>
+  </data>
+  <data name="StampaDatiAggiornati" xml:space="preserve">
+    <value>Ich drucke die angeforderten Daten, aktualisiert bis zum Rennen am {0}</value>
+  </data>
+  <data name="InitCalendarLeggoDB" xml:space="preserve">
+    <value>Lese Kalender aus Datenbank...</value>
+  </data>
+  <data name="InitCalendarNessunCalendario" xml:space="preserve">
+    <value>Kein Kalender vorhanden, lade von Gpro herunter...</value>
+  </data>
+  <data name="InitCalendarSalvataggio" xml:space="preserve">
+    <value>Speichere Kalender in Datenbank...</value>
+  </data>
+  <data name="BestPitStop" xml:space="preserve">
+    <value>BESTES PIT</value>
+  </data>
+  <data name="ChooseOption" xml:space="preserve">
+    <value>Wählen Sie eine Option</value>
+  </data>
+  <data name="InsertTokenOption" xml:space="preserve">
+    <value>Token einfügen</value>
+  </data>
+  <data name="EditTokenOption" xml:space="preserve">
+    <value>Token bearbeiten</value>
+  </data>
+  <data name="ExitOption" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="InsertNewTokenPrompt" xml:space="preserve">
+    <value>Neues Token einfügen:</value>
+  </data>
+  <data name="EditNewTokenPrompt" xml:space="preserve">
+    <value>Neues Token bearbeiten:</value>
+  </data>
+  <data name="TokenSavedSuccess" xml:space="preserve">
+    <value>Token erfolgreich gespeichert!</value>
+  </data>
+  <data name="NextPage" xml:space="preserve">
+    <value>Nächste Seite</value>
+  </data>
+  <data name="PreviousPage" xml:space="preserve">
+    <value>Vorherige Seite</value>
+  </data>
+  <data name="ExitPagination" xml:space="preserve">
+    <value>Ansicht beenden</value>
+  </data>
+  <data name="PageNavigation" xml:space="preserve">
+    <value>Seitennavigation</value>
+  </data>
+  <data name="Page" xml:space="preserve">
+    <value>Seite</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>von</value>
+  </data>
+  <data name="Drivers" xml:space="preserve">
+    <value>Fahrer</value>
+  </data>
+  <data name="LastUpdate" xml:space="preserve">
+    <value>Letzte Aktualisierung</value>
+  </data>
+  <data name="Source" xml:space="preserve">
+    <value>Quelle</value>
+  </data>
+  <data name="MainMenuTitle" xml:space="preserve">
+    <value>Hauptmenü</value>
+  </data>
+  <data name="MainMenuViewStandings" xml:space="preserve">
+    <value>Tabellen anzeigen</value>
+  </data>
+  <data name="MainMenuExit" xml:space="preserve">
+    <value>Beenden</value>
+  </data>
+  <data name="GoodbyeMessage" xml:space="preserve">
+    <value>Auf Wiedersehen!</value>
+  </data>
+  <data name="FirstPage" xml:space="preserve">
+    <value>Erste Seite</value>
+  </data>
+  <data name="LastPage" xml:space="preserve">
+    <value>Letzte Seite</value>
+  </data>
+  <data name="SearchDriver" xml:space="preserve">
+    <value>Fahrer suchen</value>
+  </data>
+  <data name="EnterDriverNamePrompt" xml:space="preserve">
+    <value>Fahrernamen eingeben</value>
+  </data>
+  <data name="DriverNotFound" xml:space="preserve">
+    <value>Fahrer nicht gefunden</value>
+  </data>
+  <data name="HighlightedDriver" xml:space="preserve">
+    <value>Hervorgehobener Fahrer</value>
+  </data>
+  <data name="MultipleDriversFound" xml:space="preserve">
+    <value>Gefundene Fahrer</value>
+  </data>
+  <data name="SelectDriverPrompt" xml:space="preserve">
+    <value>Wählen Sie einen Fahrer:</value>
+  </data>
+  <data name="Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="CancelSelection" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="GetTokenInstructions" xml:space="preserve">
+    <value>So erhalten Sie das Token</value>
+  </data>
+  <data name="TokenInstructionsTitle" xml:space="preserve">
+    <value>Anleitung zum Erhalt des Tokens von GPRO</value>
+  </data>
+  <data name="TokenStep1" xml:space="preserve">
+    <value>Melden Sie sich in Ihrem Konto auf [link]https://www.gpro.net[/] an</value>
+  </data>
+  <data name="TokenStep2" xml:space="preserve">
+    <value>Gehen Sie zu Verschiedene Themen</value>
+  </data>
+  <data name="TokenStep3" xml:space="preserve">
+    <value>Wählen Sie 'API-Zugriff'</value>
+  </data>
+  <data name="TokenStep4" xml:space="preserve">
+    <value>Kopieren Sie das Autorisierungstoken</value>
+  </data>
+  <data name="TokenSecurityWarning" xml:space="preserve">
+    <value>Bewahren Sie dieses Token geheim auf, als wäre es ein Passwort!</value>
+  </data>
+  <data name="PressAnyKey" xml:space="preserve">
+    <value>[grey]Drücken Sie eine beliebige Taste, um fortzufahren...[/]</value>
+  </data>
+  <data name="Manager" xml:space="preserve">
+    <value>MANAGER</value>
+  </data>
+</root>
