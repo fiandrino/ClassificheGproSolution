@@ -14,6 +14,7 @@ namespace Mariottide
             builder.RegisterType<BusinessLogic>().As<IBusinessLogic>();
             builder.RegisterType<ApiRequestGpro>().As<IApiRequestGpro>();
             builder.RegisterType<Registrazione>().As <IRegistrazione>();
+            builder.RegisterType<UserInterfaces>().As<IUserInterfaces>();
             builder.RegisterType<LocalizationManager>().As<ILocalizationManager>().SingleInstance();
             builder.RegisterType<DbRepository>().As<IDbRepository>();
             builder.RegisterType<RaceResultsPrinter>().As<IRaceResultsPrinter>();

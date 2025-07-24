@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ApiServices;
 using DbServices;
 using Localizations;
-using Spectre.Console;
-using Calendar = ApiServices.Calendar;
 
 namespace Mariottide
 {
@@ -38,12 +34,14 @@ namespace Mariottide
         private readonly IDbRepository _dbRepository;
         private readonly IRegistrazione _registrazione;
         private readonly IRaceResultsPrinter _raceResultPrinter;
+        private readonly IUserInterfaces _userInterfaces;
         private string _token;
         public BusinessLogic(
             IApiRequestGpro apiRequestGpro,
             ILocalizationManager localizationManager,
             IDbRepository dbRepository,
             IRegistrazione registrazione,
+            IUserInterfaces userInterfaces,
             IRaceResultsPrinter raceResultsPrinter)
         {
             _apiRequestGpro = apiRequestGpro;
@@ -51,19 +49,20 @@ namespace Mariottide
             _dbRepository = dbRepository;
             _registrazione = registrazione;
             _raceResultPrinter = raceResultsPrinter;
+            _userInterfaces = userInterfaces;
         }
         public async Task ProcessData()
         {
-            InitializeConsole();
-            SelectLanguage();
+            _userInterfaces.InitializeConsole();
+            _userInterfaces.SelectLanguage();
             _token = _registrazione.ReadToken();
 
             while (true)
             {
-                AnsiConsole.Clear();
+                _userInterfaces.ClearScreen();
                 try
                 {
-                    var choice = ShowMainMenu();
+                    var choice = _userInterfaces.MainMenu();
                     if (choice == MainMenuOption.Exit)
                     {
                         break;
@@ -71,119 +70,18 @@ namespace Mariottide
 
                     if (choice == MainMenuOption.ViewStandings)
                     {
-                        var tipoClassifica = SelectTipoClassifica();
-                        var category = SelectCategory();
+                        var tipoClassifica = _userInterfaces.SelectTipoClassifica();
+                        var category = _userInterfaces.SelectCategory();
                         await ProcessCategoryData(tipoClassifica, category);
                     }
                 }
                 catch (Exception ex)
                 {
-                    AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);
-                    AnsiConsole.MarkupLine("[red]Premi un tasto per continuare...[/]");
-                    Console.ReadKey();
+                    _userInterfaces.Exception(ex);
                 }
             }
-            await ExitMessage();
-        }
-        private async Task ExitMessage()
-        {
-            AnsiConsole.Clear();
 
-            // Ottieni il messaggio
-            string message = _localizationManager.GetString("GoodbyeMessage");
-
-            // Calcola il centro verticale
-            int height = Console.WindowHeight;
-            int figletHeight = 6; // Altezza approssimativa del font Figlet
-            int top = Math.Max(0, (height - figletHeight) / 2);
-
-            // Posiziona il cursore
-            Console.SetCursorPosition(0, top);
-
-            // Mostra testo grande centrato
-            AnsiConsole.Write(
-                new FigletText(message)
-                    .Centered()
-                    .Color(Color.Green)
-            );
-
-            await Task.Delay(3000);
-        }
-        private void InitializeConsole()
-        {
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.Title = "Mariottide";
-            AnsiConsole.Clear();
-        }
-        private void SelectLanguage()
-        {
-            AnsiConsole.Write(new Rule("[bold blue]Selezione lingua / Language selection[/]").RuleStyle("grey").Centered());
-            AnsiConsole.WriteLine();
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title("[yellow]Seleziona la tua lingua / Select your language:[/]")
-                    .PageSize(6)
-                    .AddChoices(
-                        "Italiano",
-                        "English",
-                        "Français",
-                        "Español",
-                        "Deutsch",
-                        "Русский"
-                    ));
-
-            _localizationManager.SetCulture(choice switch
-            {
-                "English" => "en",
-                "Français" => "fr",
-                "Español" => "es",
-                "Deutsch" => "de",
-                "Русский" => "ru",
-                _ => "it"
-            });
-        }
-        private TipoClassifica SelectTipoClassifica()
-        {
-            var choices = new[]
-            {
-                _localizationManager.GetString("TipoClassificaOpzione1"),
-                _localizationManager.GetString("TipoClassificaOpzione2")
-            };
-
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title($"[bold yellow]{_localizationManager.GetString("TipoClassificaTitolo")}[/]")
-                    .PageSize(3)
-                    .AddChoices(choices));
-
-            return choice == choices[0] ? TipoClassifica.it : TipoClassifica.all;
-        }
-        private Category SelectCategory()
-        {
-            var choices = new[]
-            {
-                _localizationManager.GetString("ClassificaOpzione1"),
-                _localizationManager.GetString("ClassificaOpzione2"),
-                _localizationManager.GetString("ClassificaOpzione3"),
-                _localizationManager.GetString("ClassificaOpzione4"),
-                _localizationManager.GetString("ClassificaOpzione5")
-            };
-
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title($"[bold yellow]{_localizationManager.GetString("ClassificaTitolo")}[/]")
-                    .PageSize(5)
-                    .AddChoices(choices));
-
-            return choice switch
-            {
-                string s when s == choices[0] => Category.Rookie,
-                string s when s == choices[1] => Category.Amateur,
-                string s when s == choices[2] => Category.Pro,
-                string s when s == choices[3] => Category.Master,
-                string s when s == choices[4] => Category.Elite,
-                _ => Category.Pro
-            };
+            await _userInterfaces.ExitMessage();
         }
         private async Task ProcessCategoryData(TipoClassifica tipoClassifica, Category category)
         {
@@ -205,7 +103,7 @@ namespace Mariottide
             }
             _apiRequestGpro.Autenticazione(_token);
             var office = await _apiRequestGpro.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
-            dbOffice = MapToDbOffice(office);
+            dbOffice = DtoMapper.MapToDbOffice(office);
             await _dbRepository.SaveOffice(dbOffice, tipoClassifica.ToString());
 
             return dbOffice;
@@ -217,7 +115,7 @@ namespace Mariottide
             _apiRequestGpro.Autenticazione(_token);
             var calendar = await _apiRequestGpro.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
             calendar = FilterRaceEvents(calendar);
-            dbCalendar = MapToDbCalendar(calendar);
+            dbCalendar = DtoMapper.MapToDbCalendar(calendar);
             await _dbRepository.SaveCalendar(dbCalendar, tipoClassifica.ToString());
 
             return dbCalendar;
@@ -259,7 +157,7 @@ namespace Mariottide
             _apiRequestGpro.Autenticazione(_token);
             var apiRace = await _apiRequestGpro.GetApiAsync<RaceSummary>(UrlBase.urlBaseRaceSummary, category.ToString());
 
-            var race = MapToDbRace(apiRace, category.ToString());
+            var race = DtoMapper.MapToDbRace(apiRace, category.ToString());
             race = FiltraPerNatzionalita(race, tipoClassifica);
             race = OrdinaPerPosizioneArrivo(race);
 
@@ -336,7 +234,7 @@ namespace Mariottide
                 return;
 
             DeleteDatabaseFiles();
-            ExitApplication("Gpro è in reset. Il programma verrà chiuso alla pressione di un tasto");
+            _userInterfaces.ExitApplication("Reset gpro");
         }
         private void DeleteDatabaseFiles()
         {
@@ -346,12 +244,6 @@ namespace Mariottide
                 File.Delete(file);
             }
         }
-        private void ExitApplication(string message)
-        {
-            AnsiConsole.MarkupLine($"[red]{message}[/]");
-            Console.ReadKey();
-            Environment.Exit(0);
-        }
         private void PrintResults(TipoClassifica tipoClassifica, Category category, DbRaceSummary race, int richiesteRimanentiApi)
         {
             if (race == null || !race.Managers.Any())
@@ -360,118 +252,7 @@ namespace Mariottide
             _raceResultPrinter.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi);
             _raceResultPrinter.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi, true);
         }
-        private DbRaceSummary MapToDbRace(RaceSummary apiModel, string category)
-        {
-            return new DbRaceSummary
-            {
-                Season = Convert.ToInt32(apiModel.Season),
-                Race = apiModel.Race,
-                TrackName = apiModel.TrackName,
-                Downloaded = DateTime.Today,
-                ApiRequestsRemaining = apiModel.ApiRequestsRemaining,
-                Managers = apiModel.Managers.Select(m => new DbManager
-                {
-                    idx = Convert.ToInt32(m.idx),
-                    natCode = m.natCode,
-                    idm = m.idm,
-                    Name = m.Name,
-                    Pos = m.Pos,
-                    Progress = m.Progress,
-                    Tyre = m.Tyre,
-                    RaceTime = m.RaceTime,
-                    LapsCompleted = m.LapsCompleted,
-                    PitStops = m.PitStops,
-                    BestLapTime = m.BestLapTime,
-                    AvgSpeed = m.AvgSpeed,
-                    BestPitTime = m.BestPitTime,
-                    Points = 0,
-                    TotPoints = 0,
-                    Category = category
-                }).ToList()
-            };
-        }
-        private DbCalendar MapToDbCalendar(Calendar calendar)
-        {
-            return new DbCalendar
-            {
-                Events = calendar.Events.Select(m => new DbEvent
-                {
-                    DateEvent = ConvertToDateTime(m.DateEvent),
-                    Idx = m.Idx,
-                    EventType = m.EventType
-                }).ToList()
-            };
-        }
-        private DbOffice MapToDbOffice(Office apiOffice)
-        {
-            return new DbOffice
-            {
-                ApiRequestsRemaining = apiOffice.ApiRequestsRemaining,
-                EndOfSeason = apiOffice.EndOfSeason,
-                NextSeasonResetDate = ConvertToDateTimeForOffice(apiOffice.NextSeasonResetDate),
-                Progress = apiOffice.Progress,
-                RaceNb = apiOffice.RaceNb,
-                SeasonNb = apiOffice.SeasonNb,
-                TrackId = apiOffice.TrackId,
-                UpdateInProgress = apiOffice.UpdateInProgress
-            };
-        }
-        private DateTime ConvertToDateTimeForOffice(string dateString)
-        {
-            if (string.IsNullOrWhiteSpace(dateString))
-                throw new ArgumentException("La stringa della data non può essere vuota", nameof(dateString));
 
-            string cleanedDate = Regex.Replace(dateString, @"(\d+)(st|nd|rd|th)\b", "$1");
-            string fullDateString = $"{cleanedDate} {DateTime.Now.Year}";
-            string format = "MMM dd yyyy";
 
-            return DateTime.ParseExact(
-                fullDateString,
-                format,
-                CultureInfo.InvariantCulture
-            );
-        }
-        private DateTime ConvertToDateTime(string dateString)
-        {
-            string textContent = Regex.Replace(
-                dateString,
-                @"<[^>]+>|&nbsp;",
-                string.Empty
-            ).Trim();
-
-            if (string.Equals(textContent, "Today", StringComparison.OrdinalIgnoreCase))
-                return DateTime.Today;
-
-            if (string.Equals(textContent, "YesterDay", StringComparison.OrdinalIgnoreCase))
-                return DateTime.Today.AddDays(-1);
-
-            string cleanedDate = Regex.Replace(
-                textContent,
-                @"(\d+)(st|nd|rd|th)",
-                "$1"
-            );
-
-            return DateTime.ParseExact(
-                cleanedDate,
-                "MMM d, yyyy",
-                CultureInfo.InvariantCulture
-            );
-        }
-        private MainMenuOption ShowMainMenu()
-        {
-            var choices = new[]
-            {
-        _localizationManager.GetString("MainMenuViewStandings"),
-        _localizationManager.GetString("MainMenuExit")
-    };
-
-            var choice = AnsiConsole.Prompt(
-                new SelectionPrompt<string>()
-                    .Title($"[bold yellow]{_localizationManager.GetString("MainMenuTitle")}[/]")
-                    .PageSize(10)
-                    .AddChoices(choices));
-
-            return choice == choices[0] ? MainMenuOption.ViewStandings : MainMenuOption.Exit;
-        }
     }
 }
