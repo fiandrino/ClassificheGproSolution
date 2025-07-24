@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using ApiServices;
 using DbServices;
-using Localizations;
 
 namespace Mariottide
 {
@@ -30,7 +28,6 @@ namespace Mariottide
     public class BusinessLogic : IBusinessLogic
     {
         private readonly IApiRequestGpro _apiRequestGpro;
-        private readonly ILocalizationManager _localizationManager;
         private readonly IDbRepository _dbRepository;
         private readonly IRegistrazione _registrazione;
         private readonly IRaceResultsPrinter _raceResultPrinter;
@@ -38,14 +35,12 @@ namespace Mariottide
         private string _token;
         public BusinessLogic(
             IApiRequestGpro apiRequestGpro,
-            ILocalizationManager localizationManager,
             IDbRepository dbRepository,
             IRegistrazione registrazione,
             IUserInterfaces userInterfaces,
             IRaceResultsPrinter raceResultsPrinter)
         {
             _apiRequestGpro = apiRequestGpro;
-            _localizationManager = localizationManager;
             _dbRepository = dbRepository;
             _registrazione = registrazione;
             _raceResultPrinter = raceResultsPrinter;
