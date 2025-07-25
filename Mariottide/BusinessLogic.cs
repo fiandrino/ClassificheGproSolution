@@ -27,11 +27,11 @@ namespace Mariottide
 
     public class BusinessLogic : IBusinessLogic
     {
-        private readonly IApiRequestGpro _apiRequestGpro;
-        private readonly IDbRepository _dbRepository;
-        private readonly IRegistrazione _registrazione;
-        private readonly IRaceResultsPrinter _raceResultPrinter;
-        private readonly IUserInterfaces _userInterfaces;
+        private readonly IApiRequestGpro _api;
+        private readonly IDbRepository _db;
+        private readonly IRegistrazione _reg;
+        private readonly IRaceResultsPrinter _printer;
+        private readonly IUserInterfaces _ui;
         private string _token;
         public BusinessLogic(
             IApiRequestGpro apiRequestGpro,
@@ -40,44 +40,47 @@ namespace Mariottide
             IUserInterfaces userInterfaces,
             IRaceResultsPrinter raceResultsPrinter)
         {
-            _apiRequestGpro = apiRequestGpro;
-            _dbRepository = dbRepository;
-            _registrazione = registrazione;
-            _raceResultPrinter = raceResultsPrinter;
-            _userInterfaces = userInterfaces;
+            _api = apiRequestGpro;
+            _db = dbRepository;
+            _reg = registrazione;
+            _printer = raceResultsPrinter;
+            _ui = userInterfaces;
         }
         public async Task ProcessData()
         {
-            _userInterfaces.InitializeConsole();
-            _userInterfaces.SelectLanguage();
-            _token = _registrazione.ReadToken();
+            _ui.InitializeConsole();
+            _ui.SelectLanguage();
 
-            while (true)
+            bool running = true;
+            while (running)
             {
-                _userInterfaces.ClearScreen();
+                _ui.ClearScreen();
                 try
                 {
-                    var choice = _userInterfaces.MainMenu();
-                    if (choice == MainMenuOption.Exit)
+                    var option = _ui.MainMenu();
+                    switch (option)
                     {
-                        break;
-                    }
+                        case MainMenuOption.ViewStandings:
+                            _token = _reg.ReadToken();
+                            var tipoClassifica = _ui.SelectTipoClassifica();
+                            var category = _ui.SelectCategory();
+                            await ProcessCategoryData(tipoClassifica, category);
+                            break;
 
-                    if (choice == MainMenuOption.ViewStandings)
-                    {
-                        var tipoClassifica = _userInterfaces.SelectTipoClassifica();
-                        var category = _userInterfaces.SelectCategory();
-                        await ProcessCategoryData(tipoClassifica, category);
+                        case MainMenuOption.Exit:
+                            running = false;
+                            break;
                     }
                 }
                 catch (Exception ex)
                 {
-                    _userInterfaces.Exception(ex);
+                    _ui.Exception(ex);
                 }
             }
 
-            await _userInterfaces.ExitMessage();
+            await _ui.ExitMessage();
         }
+
         private async Task ProcessCategoryData(TipoClassifica tipoClassifica, Category category)
         {
             var dbOffice = await InitializeOffice(tipoClassifica);
@@ -91,27 +94,27 @@ namespace Mariottide
         }
         private async Task<DbOffice> InitializeOffice(TipoClassifica tipoClassifica)
         {
-            var dbOffice = await _dbRepository.ReadOffice(tipoClassifica.ToString());
+            var dbOffice = await _db.ReadOffice(tipoClassifica.ToString());
             if (dbOffice != null)
             {
                 return dbOffice;
             }
-            _apiRequestGpro.Autenticazione(_token);
-            var office = await _apiRequestGpro.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
+            _api.Autenticazione(_token);
+            var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
             dbOffice = DtoMapper.MapToDbOffice(office);
-            await _dbRepository.SaveOffice(dbOffice, tipoClassifica.ToString());
+            await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
 
             return dbOffice;
         }
         private async Task<DbCalendar> InitializeCalendar(TipoClassifica tipoClassifica)
         {
-            var dbCalendar = await _dbRepository.ReadCalendar(tipoClassifica.ToString());
+            var dbCalendar = await _db.ReadCalendar(tipoClassifica.ToString());
             if (dbCalendar != null) return dbCalendar;
-            _apiRequestGpro.Autenticazione(_token);
-            var calendar = await _apiRequestGpro.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
+            _api.Autenticazione(_token);
+            var calendar = await _api.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
             calendar = FilterRaceEvents(calendar);
             dbCalendar = DtoMapper.MapToDbCalendar(calendar);
-            await _dbRepository.SaveCalendar(dbCalendar, tipoClassifica.ToString());
+            await _db.SaveCalendar(dbCalendar, tipoClassifica.ToString());
 
             return dbCalendar;
         }
@@ -133,12 +136,12 @@ namespace Mariottide
         }
         private async Task<DbRaceSummary> GetRaceData(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate, DateTime? prevRaceDate)
         {
-            var race = await _dbRepository.ReadLastRace(category.ToString(), tipoClassifica.ToString());
+            var race = await _db.ReadLastRace(category.ToString(), tipoClassifica.ToString());
 
             if (ShouldFetchNewRace(race, proxRaceDate, prevRaceDate))
             {
                 race = await FetchAndProcessNewRace(category, tipoClassifica, proxRaceDate);
-                await _dbRepository.SaveRaceSummary(race, race.Managers, tipoClassifica.ToString());
+                await _db.SaveRaceSummary(race, race.Managers, tipoClassifica.ToString());
             }
 
             return race;
@@ -149,14 +152,14 @@ namespace Mariottide
         }
         private async Task<DbRaceSummary> FetchAndProcessNewRace(Category category, TipoClassifica tipoClassifica, DateTime? proxRaceDate)
         {
-            _apiRequestGpro.Autenticazione(_token);
-            var apiRace = await _apiRequestGpro.GetApiAsync<RaceSummary>(UrlBase.urlBaseRaceSummary, category.ToString());
+            _api.Autenticazione(_token);
+            var apiRace = await _api.GetApiAsync<RaceSummary>(UrlBase.urlBaseRaceSummary, category.ToString());
 
             var race = DtoMapper.MapToDbRace(apiRace, category.ToString());
             race = FiltraPerNatzionalita(race, tipoClassifica);
             race = OrdinaPerPosizioneArrivo(race);
 
-            var puntiManagersStagione = await _dbRepository.SommaPuntiGare(
+            var puntiManagersStagione = await _db.SommaPuntiGare(
                 race.Season,
                 category.ToString(),
                 tipoClassifica.ToString());
@@ -229,7 +232,7 @@ namespace Mariottide
                 return;
 
             DeleteDatabaseFiles();
-            _userInterfaces.ExitApplication("Reset gpro");
+            _ui.ExitApplication("Reset gpro");
         }
         private void DeleteDatabaseFiles()
         {
@@ -244,8 +247,8 @@ namespace Mariottide
             if (race == null || !race.Managers.Any())
                 return;
 
-            _raceResultPrinter.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi);
-            _raceResultPrinter.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi, true);
+            _printer.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi);
+            _printer.PrintResults(race, category.ToString(), tipoClassifica, richiesteRimanentiApi, true);
         }
 
 
