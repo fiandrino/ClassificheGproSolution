@@ -5,12 +5,13 @@ using System.Linq;
 using Spectre.Console;
 using System.Net;
 using System.Text.RegularExpressions;
-using DbServices;
 using Localizations;
+using DataLayerServices;
+using DbServices;
 
-namespace Mariottide
+namespace PrinterServices
 {
-    public class RaceResultsPrinter : IRaceResultsPrinter
+    public class RaceResultsPrinter : IRaceResultPrinter
     {
         private const int PageSize = 25; // Numero di elementi per pagina
         private readonly ILocalizationManager _localizationManager;
@@ -18,7 +19,7 @@ namespace Mariottide
         {
             _localizationManager = localizationManager;
         }
-        public void PrintResults(DbRaceSummary race, string category, TipoClassifica tipoClassifica, int requestRem, bool isSeasonStandings = false)
+        public void PrintResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, int requestRem, bool isSeasonStandings = false)
         {
             int currentPage = 0;
             var filteredManagers = GetFilteredManagers(race.Managers, category, isSeasonStandings);
@@ -104,12 +105,12 @@ namespace Mariottide
                 }
             }
         }
-        private string BuildTitle(DbRaceSummary race, string category, TipoClassifica tipoClassifica)
+        private string BuildTitle(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica)
         {
             string tclassifica = _localizationManager.GetString(tipoClassifica switch
             {
-                TipoClassifica.all => "ClassificaMondiale",
-                TipoClassifica.it => "ClassificaItaliana",
+                Enums.TipoClassifica.all => "ClassificaMondiale",
+                Enums.TipoClassifica.it => "ClassificaItaliana",
                 _ => "NessunaClassifica"
             });
 

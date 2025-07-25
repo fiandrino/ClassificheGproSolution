@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
+using DataLayerServices;
 
 namespace Mariottide
 {
     public interface IUserInterfaces
     {
-        void SelectLanguage();
-        void ExitApplication(string message);
-        TipoClassifica SelectTipoClassifica();
-        MainMenuOption MainMenu();
         void ClearScreen();
         void Exception(Exception ex);
-        Category SelectCategory();
-        void InitializeConsole();
+        void ExitApplication(string message);
         Task ExitMessage();
+        void InitializeConsole();
+        Enums.MainMenuOption MainMenu();
+        Enums.Category SelectCategory();
+        void SelectLanguage();
+        Enums.TipoClassifica SelectTipoClassifica();
     }
 }

@@ -16,9 +16,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ApiServices\ApiServices.csproj" />
-    <ProjectReference Include="..\DbServices\DbServices.csproj" />
+    <ProjectReference Include="..\DataLayerServices\DataLayerServices.csproj" />
     <ProjectReference Include="..\Localizations\Localizations.csproj" />
+    <ProjectReference Include="..\PrinterServices\PrinterServices.csproj" />
   </ItemGroup>
 
 

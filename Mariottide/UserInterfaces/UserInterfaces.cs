@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using DataLayerServices;
 using Localizations;
 using Spectre.Console;
 using Rule = Spectre.Console.Rule;
@@ -36,7 +37,7 @@ namespace Mariottide
             };
             _localizationManager.SetCulture(cultureCode);
         }
-        public TipoClassifica SelectTipoClassifica()
+        public Enums.TipoClassifica SelectTipoClassifica()
         {
             var choices = new[]
             {
@@ -45,14 +46,14 @@ namespace Mariottide
             };
 
             SelectionPrompt<string> selectionPrompt = new();
-            
+
             selectionPrompt.Title($"[bold yellow]{_localizationManager.GetString("TipoClassificaTitolo")}[/]");
             selectionPrompt.PageSize(3);
             selectionPrompt.AddChoices(choices);
             var choice = AnsiConsole.Prompt(selectionPrompt);
-            return choice == choices[0] ? TipoClassifica.it : TipoClassifica.all;
+            return choice == choices[0] ? Enums.TipoClassifica.it : Enums.TipoClassifica.all;
         }
-        public MainMenuOption MainMenu()
+        public Enums.MainMenuOption MainMenu()
         {
             var choices = new[]
             {
@@ -66,10 +67,9 @@ namespace Mariottide
             selectionPrompt.AddChoices(choices);
 
             var choice = AnsiConsole.Prompt(selectionPrompt);
-            return choice == choices[0] ? MainMenuOption.ViewStandings : MainMenuOption.Exit;
+            return choice == choices[0] ? Enums.MainMenuOption.ViewStandings : Enums.MainMenuOption.Exit;
         }
-
-        public Category SelectCategory()
+        public Enums.Category SelectCategory()
         {
             var choices = new[]
            {
@@ -89,12 +89,12 @@ namespace Mariottide
             var choice = AnsiConsole.Prompt(selectionPrompt);
             return choice switch
             {
-                string s when s == choices[0] => Category.Rookie,
-                string s when s == choices[1] => Category.Amateur,
-                string s when s == choices[2] => Category.Pro,
-                string s when s == choices[3] => Category.Master,
-                string s when s == choices[4] => Category.Elite,
-                _ => Category.Pro
+                string s when s == choices[0] => Enums.Category.Rookie,
+                string s when s == choices[1] => Enums.Category.Amateur,
+                string s when s == choices[2] => Enums.Category.Pro,
+                string s when s == choices[3] => Enums.Category.Master,
+                string s when s == choices[4] => Enums.Category.Elite,
+                _ => Enums.Category.Pro
             };
         }
         public void ExitApplication(string message)

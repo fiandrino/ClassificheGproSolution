@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ApiServices;
 using DbServices;
 
-namespace Mariottide
+namespace DataLayerServices
 {
     public static class DtoMapper
     {

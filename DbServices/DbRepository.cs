@@ -142,23 +142,7 @@ namespace DbServices
                 })
                 .ToDictionaryAsync(x => x.ManagerId, x => x.TotalPoints);
         }
-        public bool IsEndSeason(DbOffice dbOffice)
-        {
-            if (dbOffice?.EndOfSeason == 1)
-                return true;
-            return false;
-        }
-        public void DeleteDatabaseFiles(bool reset)
-        {
-            var files = new[] { "Global", "Italian" };
-            if (reset)
-            {
-                foreach (var file in files.Where(File.Exists))
-                {
-                    File.Delete(file);
-                }
-            }
-         }
+
 
     }
 }

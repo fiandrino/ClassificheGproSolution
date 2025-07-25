@@ -1,7 +1,9 @@
 ﻿using ApiServices;
 using Autofac;
+using DataLayerServices;
 using DbServices;
 using Localizations;
+using PrinterServices;
 
 namespace Mariottide
 {
@@ -12,12 +14,13 @@ namespace Mariottide
             var builder = new ContainerBuilder();
             builder.RegisterType<Application>().As<IApplication>();
             builder.RegisterType<BusinessLogic>().As<IBusinessLogic>();
+            builder.RegisterType<DataLayer>().As<IDataLayer>();
             builder.RegisterType<ApiRequestGpro>().As<IApiRequestGpro>();
             builder.RegisterType<Registrazione>().As <IRegistrazione>();
             builder.RegisterType<UserInterfaces>().As<IUserInterfaces>();
             builder.RegisterType<LocalizationManager>().As<ILocalizationManager>().SingleInstance();
             builder.RegisterType<DbRepository>().As<IDbRepository>();
-            builder.RegisterType<RaceResultsPrinter>().As<IRaceResultsPrinter>();
+            builder.RegisterType<RaceResultsPrinter>().As<IRaceResultPrinter>();
             return builder.Build();
         }
     }
