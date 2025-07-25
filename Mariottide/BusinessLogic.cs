@@ -84,13 +84,21 @@ namespace Mariottide
         private async Task ProcessCategoryData(TipoClassifica tipoClassifica, Category category)
         {
             var dbOffice = await InitializeOffice(tipoClassifica);
-            CheckForReset(dbOffice);
+            var reset = _db.IsEndSeason(dbOffice);
 
-            var dbCalendar = await InitializeCalendar(tipoClassifica);
-            var (proxRaceDate, prevRaceDate) = GetRaceDates(dbCalendar.Events);
+            if (reset) 
+            { 
+                _db.DeleteDatabaseFiles(reset); 
+            }
+            else
+            {
+                var dbCalendar = await InitializeCalendar(tipoClassifica);
+                var (proxRaceDate, prevRaceDate) = GetRaceDates(dbCalendar.Events);
 
-            var race = await GetRaceData(category, tipoClassifica, proxRaceDate, prevRaceDate);
-            PrintResults(tipoClassifica, category, race, race.ApiRequestsRemaining);
+                var race = await GetRaceData(category, tipoClassifica, proxRaceDate, prevRaceDate);
+                PrintResults(tipoClassifica, category, race, race.ApiRequestsRemaining);
+            }
+
         }
         private async Task<DbOffice> InitializeOffice(TipoClassifica tipoClassifica)
         {
@@ -99,22 +107,30 @@ namespace Mariottide
             {
                 return dbOffice;
             }
-            _api.Autenticazione(_token);
-            var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
-            dbOffice = DtoMapper.MapToDbOffice(office);
-            await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
-
+            else
+            {
+                _api.Autenticazione(_token);
+                var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
+                dbOffice = DtoMapper.MapToDbOffice(office);
+                await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
+            }
             return dbOffice;
         }
         private async Task<DbCalendar> InitializeCalendar(TipoClassifica tipoClassifica)
         {
             var dbCalendar = await _db.ReadCalendar(tipoClassifica.ToString());
-            if (dbCalendar != null) return dbCalendar;
-            _api.Autenticazione(_token);
-            var calendar = await _api.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
-            calendar = FilterRaceEvents(calendar);
-            dbCalendar = DtoMapper.MapToDbCalendar(calendar);
-            await _db.SaveCalendar(dbCalendar, tipoClassifica.ToString());
+            if (dbCalendar != null)
+            { 
+                return dbCalendar; 
+            }
+            else
+            {
+                _api.Autenticazione(_token);
+                var calendar = await _api.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
+                calendar = FilterRaceEvents(calendar);
+                dbCalendar = DtoMapper.MapToDbCalendar(calendar);
+                await _db.SaveCalendar(dbCalendar, tipoClassifica.ToString());
+            }
 
             return dbCalendar;
         }
@@ -225,22 +241,6 @@ namespace Mariottide
                 PointSystem.Quaranta => new[] { 40, 39, 38, 37, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 },
                 _ => throw new ArgumentOutOfRangeException(nameof(pointSystem))
             };
-        }
-        private void CheckForReset(DbOffice dbOffice)
-        {
-            if (dbOffice?.EndOfSeason != 1)
-                return;
-
-            DeleteDatabaseFiles();
-            _ui.ExitApplication("Reset gpro");
-        }
-        private void DeleteDatabaseFiles()
-        {
-            var files = new[] { "Global", "Italian" };
-            foreach (var file in files.Where(File.Exists))
-            {
-                File.Delete(file);
-            }
         }
         private void PrintResults(TipoClassifica tipoClassifica, Category category, DbRaceSummary race, int richiesteRimanentiApi)
         {

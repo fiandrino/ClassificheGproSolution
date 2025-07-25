@@ -13,5 +13,7 @@ namespace DbServices
         public Task<DbOffice> ReadOffice(string tipoClassifica);
         public Task SaveOffice(DbOffice dbOffice, string tipoClassifica);
         Task ClearOfficeData(string tipoClassifica);
+        bool IsEndSeason(DbOffice dbOffice);
+        void DeleteDatabaseFiles(bool reset);
     }
 }
