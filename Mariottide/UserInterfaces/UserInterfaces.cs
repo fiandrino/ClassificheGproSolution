@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayerServices;
@@ -117,6 +118,7 @@ namespace Mariottide
         {
             Console.OutputEncoding = Encoding.UTF8;
             Console.Title = "Mariottide";
+            CreateFolder("106");
             ClearScreen();
         }
         public async Task ExitMessage()
@@ -142,6 +144,94 @@ namespace Mariottide
             );
 
             await Task.Delay(3000);
+        }
+        public void CreateFolder(string folderName)
+        {
+            try
+            {
+                // Ottieni il percorso della directory corrente
+                string currentDirectory = Directory.GetCurrentDirectory();
+
+                // Combina il percorso con il nome della cartella
+                string folderPath = Path.Combine(currentDirectory, folderName);
+
+                // Crea la cartella se non esiste già
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Errore: {ex.Message}");
+            }
+        }
+        public void ResetMessage()
+        {
+            // Crea un pannello con il messaggio di reset
+            var panel = new Panel(
+                new Markup(
+                    "[bold yellow]ATTENZIONE:[/] Gpro è attualmente in fase di [underline]reset stagionale[/]!\n\n" +
+                    "• Verrà archiviata la vecchia stagione\n" +
+                    "• Verrà creata una nuova stagione\n" +
+                    "• L'operazione richiede fino a 24 ore\n\n" +
+                    "[grey]Aggiornamenti in tempo reale:[/] [link]https://www.gpro.net[/]")
+            )
+            {
+                Border = BoxBorder.Rounded,
+                Padding = new Padding(2, 1, 2, 1),
+                Header = new PanelHeader("[bold red]⚙️ Reset Stagionale in Corso[/]"),
+            };
+
+            // Personalizza i colori del pannello
+            panel.BorderColor(Color.Yellow);
+            panel.Header.Centered();
+
+            // Mostra il pannello
+            AnsiConsole.Write(panel);
+
+            // Mostra il messaggio informativo sul tempo
+            AnsiConsole.WriteLine();
+            AnsiConsole.MarkupLine("[grey]Il reset stagionale richiede fino a 24 ore per il completamento.[/]");
+            AnsiConsole.WriteLine();
+
+            // Crea un menu di selezione
+            var scelta = AnsiConsole.Prompt(
+                new SelectionPrompt<string>()
+                    .Title("[bold]Seleziona un'opzione:[/]")
+                    .PageSize(3)
+                    .AddChoices(new[] {
+                "Torna al menu principale",
+                "Rimani in attesa (simulazione)",
+                "Esci dall'applicazione"
+                    }));
+
+            // Gestisci la selezione
+            switch (scelta)
+            {
+                case "Torna al menu principale":
+                    return;
+
+                case "Rimani in attesa (simulazione)":
+                    // Simulazione di attesa con spinner
+                    AnsiConsole.Status()
+                        .AutoRefresh(true)
+                        .Spinner(Spinner.Known.Dots)
+                        .SpinnerStyle(Style.Parse("yellow bold"))
+                        .Start("Attesa completamento reset...", ctx =>
+                        {
+                            while (true)
+                            {
+                        // Uscita con CTRL+C
+                        System.Threading.Thread.Sleep(100);
+                            }
+                        });
+                    break;
+
+                case "Esci dall'applicazione":
+                    Environment.Exit(0);
+                    break;
+            }
         }
     }
 }

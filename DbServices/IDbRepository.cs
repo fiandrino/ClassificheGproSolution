@@ -12,6 +12,7 @@ namespace DbServices
         Task<Dictionary<int, int>> SommaPuntiGare(int season, string category, string tipoClassifica);
         public Task<DbOffice> ReadOffice(string tipoClassifica);
         public Task SaveOffice(DbOffice dbOffice, string tipoClassifica);
+        Task ClearAndSaveOffice(DbOffice dbOffice, string tipoClassifica);
         Task ClearOfficeData(string tipoClassifica);
     }
 }

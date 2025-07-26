@@ -24,9 +24,9 @@ namespace Localizations
             {
                 _currentCulture = new CultureInfo(cultureCode);
             }
-            catch
+            catch (CultureNotFoundException)
             {
-                _currentCulture = CultureInfo.InvariantCulture;
+                _currentCulture = new CultureInfo("it");
             }
         }
         public string GetString(string key, params object[] args)

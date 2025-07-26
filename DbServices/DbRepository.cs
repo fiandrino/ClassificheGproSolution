@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +9,11 @@ namespace DbServices
 {
     public class DbRepository : IDbRepository
     {
-        // Legge il calendario dal database
+        /// <summary>
+        /// Legge il calendario più recente dal database
+        /// </summary>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
+        /// <returns>Calendario completo con eventi associati o null se non presente</returns>
         public async Task<DbCalendar> ReadCalendar(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -23,7 +25,13 @@ namespace DbServices
                 .OrderByDescending(c => c.Id)
                 .FirstOrDefaultAsync();
         }
-        // Legge l'ultima gara salvata nel database per una categoria
+
+        /// <summary>
+        /// Legge l'ultima gara salvata per una specifica categoria
+        /// </summary>
+        /// <param name="category">Categoria da filtrare (es. "GT3")</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
+        /// <returns>Dettagli della gara con i manager filtrati per categoria o null se non presente</returns>
         public async Task<DbRaceSummary> ReadLastRace(string category, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -36,9 +44,9 @@ namespace DbServices
                 // Recupera l'ultima gara per stagione e numero gara
                 DbRaceSummary dbRaceSummary = await context.DbRaceSummaries
                     .Include(c => c.Managers)
-                    .OrderBy(s => s.Season)
-                    .OrderBy(r => r.Race)
-                    .LastOrDefaultAsync();
+                    .OrderByDescending(s => s.Season)
+                    .ThenByDescending(r => r.Race)
+                    .FirstOrDefaultAsync();
 
                 if (dbRaceSummary != null)
                 {
@@ -56,13 +64,23 @@ namespace DbServices
                 return null;
             }
         }
-        //Legge Office
+
+        /// <summary>
+        /// Legge i dati dell'ufficio (office) dal database
+        /// </summary>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
+        /// <returns>Record DbOffice o null se non presente</returns>
         public async Task<DbOffice> ReadOffice(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
             await context.Database.EnsureCreatedAsync();
             return await context.DbOffice.FirstOrDefaultAsync();
         }
+
+        /// <summary>
+        /// Cancella tutti i dati dell'ufficio dal database
+        /// </summary>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
         public async Task ClearOfficeData(string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -70,7 +88,12 @@ namespace DbServices
             context.DbOffice.RemoveRange(allOffices);
             await context.SaveChangesAsync();
         }
-        //Salva Office
+
+        /// <summary>
+        /// Salva i dati dell'ufficio nel database se non esiste già un record con la stessa data di reset
+        /// </summary>
+        /// <param name="dbOffice">Dati dell'ufficio da salvare</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
         public async Task SaveOffice(DbOffice dbOffice, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -81,7 +104,42 @@ namespace DbServices
                 await context.SaveChangesAsync();
             }
         }
-        // Salva i risultati di una gara nel database
+
+        /// <summary>
+        /// Sostituisce completamente i dati dell'ufficio nel database
+        /// </summary>
+        /// <param name="dbOffice">Dati dell'ufficio da salvare</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
+        public async Task ClearAndSaveOffice(DbOffice dbOffice, string tipoClassifica)
+        {
+            if (dbOffice == null)
+                return;
+
+            using var context = DbContextFactory.CreateContext(tipoClassifica);
+
+            // Controlla se esiste già un record nel database
+            var existingOffice = await context.DbOffice.FirstOrDefaultAsync();
+
+            if (existingOffice != null)
+            {
+                // Sovrascrivi i dati esistenti con i nuovi valori
+                context.Entry(existingOffice).CurrentValues.SetValues(dbOffice);
+            }
+            else
+            {
+                // Se non esiste alcun record, aggiungine uno nuovo
+                context.DbOffice.Add(dbOffice);
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        /// <summary>
+        /// Salva i risultati di una gara nel database
+        /// </summary>
+        /// <param name="dbrace">Dati della gara da salvare</param>
+        /// <param name="orderedManagers">Lista dei manager ordinati per la gara</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
         public async Task SaveRaceSummary(DbRaceSummary dbrace, List<DbManager> orderedManagers, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -105,21 +163,22 @@ namespace DbServices
                 {
                     existingRace.Managers.Add(newManager);
                 }
-
-                Console.WriteLine($"Aggiornata gara esistente: Stagione {dbrace.Season}, Gara {dbrace.Race}");
-                Console.WriteLine($"Aggiunti {newManagers.Count} nuovi manager");
             }
             else
             {
                 // NUOVA GARA: aggiungi tutto il record
                 dbrace.Managers = orderedManagers;
                 context.DbRaceSummaries.Add(dbrace);
-                Console.WriteLine($"Aggiunta nuova gara: Stagione {dbrace.Season}, Gara {dbrace.Race}");
             }
 
             await context.SaveChangesAsync();
         }
-        // Salva il calendario nel database
+
+        /// <summary>
+        /// Salva un calendario completo nel database
+        /// </summary>
+        /// <param name="dbCalendar">Dati del calendario da salvare</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
         public async Task SaveCalendar(DbCalendar dbCalendar, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -127,7 +186,14 @@ namespace DbServices
             context.DbCalendars.Add(dbCalendar);
             await context.SaveChangesAsync();
         }
-        // Nuovo metodo per recuperare i punti stagionali
+
+        /// <summary>
+        /// Calcola la somma dei punti per tutti i manager in una specifica stagione e categoria
+        /// </summary>
+        /// <param name="season">Stagione di riferimento</param>
+        /// <param name="category">Categoria da filtrare</param>
+        /// <param name="tipoClassifica">Tipo di classifica per identificare il contesto del database</param>
+        /// <returns>Dizionario con ID manager e punti totali accumulati</returns>
         public async Task<Dictionary<int, int>> SommaPuntiGare(int season, string category, string tipoClassifica)
         {
             using var context = DbContextFactory.CreateContext(tipoClassifica);
@@ -142,7 +208,5 @@ namespace DbServices
                 })
                 .ToDictionaryAsync(x => x.ManagerId, x => x.TotalPoints);
         }
-
-
     }
 }

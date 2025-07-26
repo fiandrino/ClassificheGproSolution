@@ -15,5 +15,7 @@ namespace Mariottide
         Enums.Category SelectCategory();
         void SelectLanguage();
         Enums.TipoClassifica SelectTipoClassifica();
+        void CreateFolder(string folderName);
+        void ResetMessage();
     }
 }

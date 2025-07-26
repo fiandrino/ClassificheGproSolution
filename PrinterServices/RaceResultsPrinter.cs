@@ -19,7 +19,7 @@ namespace PrinterServices
         {
             _localizationManager = localizationManager;
         }
-        public void PrintResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, int requestRem, bool isSeasonStandings = false)
+        public void PrintResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, bool isSeasonStandings = false)
         {
             int currentPage = 0;
             var filteredManagers = GetFilteredManagers(race.Managers, category, isSeasonStandings);
@@ -40,7 +40,7 @@ namespace PrinterServices
                 var pageManagers = GetPageManagers(filteredManagers, currentPage);
 
                 PopulateTable(table, pageManagers, isSeasonStandings, currentPage, highlightedDriverIds);
-                AddTableFooter(table, filteredManagers.Count, currentPage + 1, totalPages, requestRem);
+                AddTableFooter(table, filteredManagers.Count, currentPage + 1, totalPages);
 
                 AnsiConsole.Write(table);
 
@@ -199,18 +199,8 @@ namespace PrinterServices
                 var pitStopsCell = new Text(manager.PitStops, rowStyle);
                 var pitStopsBest = new Text(manager.BestPitTime, rowStyle);
 
-                table.AddRow(
-                    positionCell,
-                    nameCell,
-                    posCell,
-                    pointsCell,
-                    tyreCell,
-                    raceTimeCell,
-                    bestLapCell,
-                    avgSpeedCell,
-                    pitStopsCell,
-                    pitStopsBest
-                );
+                table.AddRow( positionCell, nameCell, posCell, pointsCell, tyreCell, raceTimeCell, 
+                    bestLapCell, avgSpeedCell, pitStopsCell, pitStopsBest);
             }
         }
         private Style GetRowStyle(int position)
@@ -236,12 +226,11 @@ namespace PrinterServices
         private string FormatName(string name)
         {
             string decoded = DecodeUnicodeEntities(name);
-            // Non facciamo più l'escape del markup qui
             return decoded.Length > 20
-                ? decoded.Substring(0, 17) + "..."
+                ? $"{decoded[..17]}..."
                 : decoded;
         }
-        private void AddTableFooter(Table table, int managerCount, int currentPage, int totalPages, int requestRem)
+        private void AddTableFooter(Table table, int managerCount, int currentPage, int totalPages)
         {
             table.Caption = new TableTitle(
                 $"[grey]{_localizationManager.GetString("LastUpdate")}: {DateTime.Now.ToString("g", CultureInfo.CurrentCulture)} | " +
@@ -278,20 +267,12 @@ namespace PrinterServices
             if (currentPage > 0)
             {
                 choices.Add(_localizationManager.GetString("FirstPage"));
-            }
-
-            if (currentPage > 0)
-            {
                 choices.Add(_localizationManager.GetString("PreviousPage"));
             }
 
             if (currentPage < totalPages - 1)
             {
                 choices.Add(_localizationManager.GetString("NextPage"));
-            }
-
-            if (currentPage < totalPages - 1)
-            {
                 choices.Add(_localizationManager.GetString("LastPage"));
             }
 
@@ -302,12 +283,12 @@ namespace PrinterServices
         }
         private List<FoundDriver> FindDrivers(List<DbManager> managers, string searchTerm)
         {
-            searchTerm = searchTerm.Trim().ToLower();
+            searchTerm = searchTerm.Trim();
             var results = new List<FoundDriver>();
 
             for (int i = 0; i < managers.Count; i++)
             {
-                if (managers[i].Name.ToLower().Contains(searchTerm))
+                if (managers[i].Name.IndexOf(searchTerm, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     results.Add(new FoundDriver
                     {
@@ -352,5 +333,5 @@ namespace PrinterServices
             public int Position { get; set; }
         }
     }
-
 }
+

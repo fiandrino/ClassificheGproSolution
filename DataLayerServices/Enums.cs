@@ -12,7 +12,7 @@ namespace DataLayerServices
         }
         public enum PointSystem
         {
-            F1, Linear, Gpro, Quaranta
+            F1, Linear, Gpro, OldLinear
         }
         public enum TipoClassifica
         {

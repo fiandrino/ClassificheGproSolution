@@ -11,8 +11,7 @@ namespace DbServices
         public int Id { get; set; }
 
         [Required]
-        [StringLength(50)]
-        public int Season { get; set; }
+        public int Season { get; set; } // <-- Rimosso [StringLength(50)]
 
         [Required]
         [StringLength(100)]
@@ -37,8 +36,7 @@ namespace DbServices
         public int Id { get; set; }
 
         [Required]
-        [StringLength(20)]
-        public int idx { get; set; }
+        public int idx { get; set; } // <-- Rimosso [StringLength(20)]
 
         [Required]
         [StringLength(3)]

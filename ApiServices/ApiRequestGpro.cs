@@ -8,11 +8,13 @@ namespace ApiServices
 {
     public class ApiRequestGpro : IApiRequestGpro
     {
-        private  HttpClient _httpClient;
+        private static HttpClient _httpClient;
 
         public void Autenticazione(string token)
         {
-            _httpClient = new HttpClient();
+            if (_httpClient == null)
+                _httpClient = new HttpClient();
+
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
 

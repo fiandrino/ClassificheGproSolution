@@ -202,7 +202,7 @@
     <value>Data gara precedente :</value>
   </data>
   <data name="GaraProx" xml:space="preserve">
-    <value>Data gara prosima:</value>
+    <value>Data gara prossima:</value>
   </data>
   <data name="GetTokenInstructions" xml:space="preserve">
     <value>Come ottenere il token</value>
@@ -343,7 +343,7 @@
     <value>Premere il numero corrispondente:</value>
   </data>
   <data name="TipoClassificaOpzione1" xml:space="preserve">
-    <value>1) Italina</value>
+    <value>1) Italiana</value>
   </data>
   <data name="TipoClassificaOpzione2" xml:space="preserve">
     <value>2) Mondiale</value>

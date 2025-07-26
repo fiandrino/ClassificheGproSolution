@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiServices;
 using DbServices;
-using Newtonsoft.Json.Linq;
 
 namespace DataLayerServices
 {
@@ -22,23 +21,29 @@ namespace DataLayerServices
 
         public async Task<DbOffice> InitializeOffice(string tipoClassifica, string token)
         {
-            var dbOffice = await _db.ReadOffice(tipoClassifica.ToString());
-            if (dbOffice != null)
-            {
-                return dbOffice;
-            }
-            else
-            {
-                _api.Autenticazione(token);
-                var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice);
-                dbOffice = DtoMapper.MapToDbOffice(office);
-                await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
-            }
+            var dbOffice = await _db.ReadOffice(tipoClassifica.ToString()).ConfigureAwait(false);
+            _api.Autenticazione(token);
+
+            var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
+            dbOffice = DtoMapper.MapToDbOffice(office);
+            await _db.ClearAndSaveOffice(dbOffice, tipoClassifica.ToString()).ConfigureAwait(false);
+
+            //if (dbOffice != null)
+            //{
+            //    return dbOffice;
+            //}
+            //else
+            //{
+            //    var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
+            //    dbOffice = DtoMapper.MapToDbOffice(office);
+            //    await _db.ClearAndSaveOffice(dbOffice, tipoClassifica.ToString()).ConfigureAwait(false);
+            //}
+
             return dbOffice;
         }
         public async Task<DbCalendar> InitializeCalendar(string tipoClassifica, string token)
         {
-            var dbCalendar = await _db.ReadCalendar(tipoClassifica.ToString());
+            var dbCalendar = await _db.ReadCalendar(tipoClassifica.ToString()).ConfigureAwait(false);
             if (dbCalendar != null)
             {
                 return dbCalendar;
@@ -46,10 +51,10 @@ namespace DataLayerServices
             else
             {
                 _api.Autenticazione(token);
-                var calendar = await _api.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar);
+                var calendar = await _api.GetApiAsync<Calendar>(UrlBase.UrlBaseCalendar).ConfigureAwait(false);
                 calendar = FilterRaceEvents(calendar);
                 dbCalendar = DtoMapper.MapToDbCalendar(calendar);
-                await _db.SaveCalendar(dbCalendar, tipoClassifica.ToString());
+                await _db.SaveCalendar(dbCalendar, tipoClassifica.ToString()).ConfigureAwait(false);
             }
 
             return dbCalendar;
@@ -100,23 +105,21 @@ namespace DataLayerServices
                 category.ToString(),
                 tipoClassifica.ToString());
 
-            return AssegnaPunti(race, Enums.PointSystem.F1, puntiManagersStagione);
+            return AssegnaPunti(race, Enums.PointSystem.Gpro, puntiManagersStagione);
         }
-
         public bool IsEndSeason(DbOffice dbOffice)
         {
-            if (dbOffice?.EndOfSeason == 1)
-                return true;
-            return false;
+            return dbOffice?.EndOfSeason == 1;
         }
         public void DeleteDatabaseFiles(bool reset)
         {
-            var files = new[] { "Global", "Italian" };
+            var files = new[] { "Global.db", "Italian.db" };
             if (reset)
             {
-                foreach (var file in files.Where(File.Exists))
+                foreach (var file in files)
                 {
-                    File.Delete(file);
+                    if (File.Exists(file))
+                        File.Delete(file);
                 }
             }
         }
@@ -176,10 +179,11 @@ namespace DataLayerServices
                 Enums.PointSystem.F1 => new[] { 25, 18, 15, 12, 10, 8, 6, 4, 2, 1 },
                 Enums.PointSystem.Linear => new[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 },
                 Enums.PointSystem.Gpro => new[] { 10, 8, 6, 5, 4, 3, 2, 1 },
-                Enums.PointSystem.Quaranta => new[] { 40, 39, 38, 37, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 },
+                Enums.PointSystem.OldLinear => new[] { 40, 39, 38, 37, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 },
                 _ => throw new ArgumentOutOfRangeException(nameof(pointSystem))
             };
         }
 
     }
 }
+
