@@ -258,6 +258,9 @@
   <data name="MultipleDriversFound" xml:space="preserve">
     <value>Pilotos encontrados</value>
   </data>
+  <data name="Nat" xml:space="preserve">
+    <value>Nat</value>
+  </data>
   <data name="NessunaClassifica" xml:space="preserve">
     <value>NINGUNA</value>
   </data>

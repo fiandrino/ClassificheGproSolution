@@ -26,19 +26,8 @@ namespace DataLayerServices
 
             var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
             dbOffice = DtoMapper.MapToDbOffice(office);
-            await _db.ClearAndSaveOffice(dbOffice, tipoClassifica.ToString()).ConfigureAwait(false);
-
-            //if (dbOffice != null)
-            //{
-            //    return dbOffice;
-            //}
-            //else
-            //{
-            //    var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
-            //    dbOffice = DtoMapper.MapToDbOffice(office);
-            //    await _db.ClearAndSaveOffice(dbOffice, tipoClassifica.ToString()).ConfigureAwait(false);
-            //}
-
+            await _db.ClearOfficeData(tipoClassifica.ToString()).ConfigureAwait(false);
+            await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
             return dbOffice;
         }
         public async Task<DbCalendar> InitializeCalendar(string tipoClassifica, string token)

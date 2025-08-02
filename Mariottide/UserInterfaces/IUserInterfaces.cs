@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using DataLayerServices;
+using DbServices;
 
 namespace Mariottide
 {
@@ -17,5 +18,6 @@ namespace Mariottide
         Enums.TipoClassifica SelectTipoClassifica();
         void CreateFolder(string folderName);
         void ResetMessage();
+        void SaveBBCodeToFiles(string raceBBCode, string seasonBBCode, DbRaceSummary race, Enums.Category category, Enums.TipoClassifica tipoClassifica);
     }
 }

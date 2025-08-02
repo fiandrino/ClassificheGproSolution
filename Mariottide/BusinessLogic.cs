@@ -96,9 +96,8 @@ namespace Mariottide
                 return;
 
             var (proxRaceDate, prevRaceDate) = _dl.GetRaceDates(dbCalendar.Events);
-            if (proxRaceDate == new DateTime(0001, 01, 01))
+            if (proxRaceDate == new DateTime(0001, 01, 01)|| prevRaceDate == new DateTime(0001, 01, 01))
             {
-                _dl.DeleteDatabaseFiles(true);
                 return;
             }
 
@@ -106,7 +105,7 @@ namespace Mariottide
             if (race is null)
                 return;
 
-            PrintResults(tipoClassifica, category, race, race.ApiRequestsRemaining);
+            PrintResults(tipoClassifica, category, race);
         }
 
         /// <summary>
@@ -116,13 +115,16 @@ namespace Mariottide
         /// <param name="category">Categoria</param>
         /// <param name="race">Oggetto contenente i dati della gara</param>
         /// <param name="richiesteRimanentiApi">Numero di richieste API ancora disponibili</param>
-        private void PrintResults(Enums.TipoClassifica tipoClassifica, Enums.Category category, DbRaceSummary race, int richiesteRimanentiApi)
+        private void PrintResults(Enums.TipoClassifica tipoClassifica, Enums.Category category, DbRaceSummary race)
         {
             if (race?.Managers == null || !race.Managers.Any())
                 return;
-
             _ptr.PrintResults(race, category.ToString(), tipoClassifica);
             _ptr.PrintResults(race, category.ToString(), tipoClassifica, isSeasonStandings: true);
+            var raceBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica);
+            var seasonBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica, true);
+            // Salva i BBCode su file
+            _ui.SaveBBCodeToFiles(raceBBCODE, seasonBBCODE, race, category, tipoClassifica);
         }
     }
 }

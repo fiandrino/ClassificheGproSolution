@@ -128,7 +128,7 @@ namespace DbServices
             else
             {
                 // Se non esiste alcun record, aggiungine uno nuovo
-                context.DbOffice.Add(dbOffice);
+                await context.DbOffice.AddAsync(dbOffice);
             }
 
             await context.SaveChangesAsync();

@@ -3,6 +3,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using DataLayerServices;
+using DbServices;
 using Localizations;
 using Spectre.Console;
 using Rule = Spectre.Console.Rule;
@@ -231,6 +232,32 @@ namespace Mariottide
                 case "Esci dall'applicazione":
                     Environment.Exit(0);
                     break;
+            }
+        }
+        public void SaveBBCodeToFiles(string raceBBCode, string seasonBBCode, DbRaceSummary race, Enums.Category category, Enums.TipoClassifica tipoClassifica)
+        {
+            try
+            {
+                // Creazione del nome base del file
+                string baseFileName = $"S{race.Season}_R{race.Race}_{category}_{tipoClassifica}";
+
+                // Generazione dei nomi file completi
+                string raceFileName = $"{baseFileName}_RaceStandings.txt";
+                string seasonFileName = $"{baseFileName}_SeasonStandings.txt";
+
+                // Salvataggio dei file
+                File.WriteAllText(raceFileName, raceBBCode);
+                File.WriteAllText(seasonFileName, seasonBBCode);
+
+                // Messaggio di conferma
+                AnsiConsole.MarkupLine($"[green]File creati con successo:[/]");
+                AnsiConsole.MarkupLine($"[yellow]{raceFileName}[/]");
+                AnsiConsole.MarkupLine($"[yellow]{seasonFileName}[/]");
+                AnsiConsole.MarkupLine($"[grey]Directory: {Directory.GetCurrentDirectory()}[/]");
+            }
+            catch (Exception ex)
+            {
+                AnsiConsole.MarkupLine($"[red]Errore durante il salvataggio:[/] {ex.Message}");
             }
         }
     }

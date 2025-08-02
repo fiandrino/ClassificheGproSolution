@@ -7,5 +7,7 @@ namespace PrinterServices
     {
         string DecodeUnicodeEntities(string input);
         void PrintResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, bool isSeasonStandings = false);
+        string GenerateBBCodeResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, bool isSeasonStandings = false);
+
     }
 }
