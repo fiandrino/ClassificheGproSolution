@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,12 +23,16 @@ namespace DataLayerServices
         public async Task<DbOffice> InitializeOffice(string tipoClassifica, string token)
         {
             var dbOffice = await _db.ReadOffice(tipoClassifica.ToString()).ConfigureAwait(false);
-            _api.Autenticazione(token);
+            
+            if (Convert.ToInt32(dbOffice.RaceNb) == 17 || Convert.ToInt32(dbOffice.RaceNb) == 1)
+            {
+                _api.Autenticazione(token);
+                var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
+                dbOffice = DtoMapper.MapToDbOffice(office);
+                await _db.ClearOfficeData(tipoClassifica.ToString()).ConfigureAwait(false);
+                await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
+            }
 
-            var office = await _api.GetApiAsync<Office>(UrlBase.UrlBaseOffice).ConfigureAwait(false);
-            dbOffice = DtoMapper.MapToDbOffice(office);
-            await _db.ClearOfficeData(tipoClassifica.ToString()).ConfigureAwait(false);
-            await _db.SaveOffice(dbOffice, tipoClassifica.ToString());
             return dbOffice;
         }
         public async Task<DbCalendar> InitializeCalendar(string tipoClassifica, string token)
@@ -73,6 +78,10 @@ namespace DataLayerServices
                 race = await FetchAndProcessNewRace(category, tipoClassifica, proxRaceDate, token);
                 await _db.SaveRaceSummary(race, race.Managers, tipoClassifica.ToString());
             }
+            else
+            {
+                OrdinaPerClassifica(race);
+            }
 
             return race;
         }
@@ -81,7 +90,7 @@ namespace DataLayerServices
             return (race == null || !race.Managers.Any()) || ((proxRaceDate > DateTime.Today && prevRaceDate < DateTime.Today && race.Downloaded < prevRaceDate));
         }
         private async Task<DbRaceSummary> FetchAndProcessNewRace(string category, Enums.TipoClassifica tipoClassifica, DateTime? proxRaceDate, string token)
-{
+        {
             _api.Autenticazione(token);
             var apiRace = await _api.GetApiAsync<RaceSummary>(UrlBase.urlBaseRaceSummary, category.ToString());
 
@@ -94,7 +103,9 @@ namespace DataLayerServices
                 category.ToString(),
                 tipoClassifica.ToString());
 
-            return AssegnaPunti(race, Enums.PointSystem.Gpro, puntiManagersStagione);
+            race = AssegnaPunti(race, Enums.PointSystem.Gpro, puntiManagersStagione);
+            race = OrdinaPerClassifica(race);
+            return race;
         }
         public bool IsEndSeason(DbOffice dbOffice)
         {
@@ -134,6 +145,19 @@ namespace DataLayerServices
             dbrace.Managers = dbrace.Managers
                 .OrderBy(m => m.idx)
                 .ToList();
+            return dbrace;
+        }
+        private DbRaceSummary OrdinaPerClassifica(DbRaceSummary dbrace)
+        {
+            var conPunti = dbrace.Managers
+                .Where(m => m.TotPoints > 0)
+                .OrderByDescending(m => m.TotPoints);
+
+            var senzaPunti = dbrace.Managers
+                .Where(m => m.TotPoints == 0)
+                .OrderBy(m => m.idx);
+
+            dbrace.Managers = conPunti.Concat(senzaPunti).ToList();
             return dbrace;
         }
         private DbRaceSummary AssegnaPunti(DbRaceSummary dbRaceSummary, Enums.PointSystem pointSystem, Dictionary<int, int> puntiManagersStagione)

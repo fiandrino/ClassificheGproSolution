@@ -17,7 +17,6 @@ namespace Mariottide
         private readonly IRaceResultPrinter _ptr;
         private readonly IUserInterfaces _ui;
         private readonly IDataLayer _dl;
-
         private string _token;
 
         /// <summary>
@@ -114,7 +113,6 @@ namespace Mariottide
         /// <param name="tipoClassifica">Tipo di classifica</param>
         /// <param name="category">Categoria</param>
         /// <param name="race">Oggetto contenente i dati della gara</param>
-        /// <param name="richiesteRimanentiApi">Numero di richieste API ancora disponibili</param>
         private void PrintResults(Enums.TipoClassifica tipoClassifica, Enums.Category category, DbRaceSummary race)
         {
             if (race?.Managers == null || !race.Managers.Any())

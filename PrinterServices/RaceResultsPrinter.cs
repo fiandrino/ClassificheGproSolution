@@ -47,11 +47,9 @@ namespace PrinterServices
 
                 var choices = BuildPaginationChoices(currentPage, totalPages);
 
-                var selection = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
+                var selection = AnsiConsole.Prompt(new SelectionPrompt<string>()
                         .Title(_localizationManager.GetString("PageNavigation"))
-                        .AddChoices(choices)
-                );
+                        .AddChoices(choices));
 
                 if (selection == _localizationManager.GetString("NextPage") && currentPage < totalPages - 1)
                 {
