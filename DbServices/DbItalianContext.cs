@@ -1,13 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DbServices
 {
-
     public class DbItalianContext : DbContext, IRacingContext
     {
         public DbSet<DbManager> DbManagers { get; set; }
-        public DbSet<DbRaceSummary> DbRaceSummaries{ get; set; }
+        public DbSet<DbRaceSummary> DbRaceSummaries { get; set; }
         public DbSet<DbCalendar> DbCalendars { get; set; }
         public DbSet<DbEvent> DbEvents { get; set; }
         public DbSet<DbOffice> DbOffice { get; set; }

@@ -285,6 +285,9 @@
   <data name="PitStop" xml:space="preserve">
     <value>PIT STOP</value>
   </data>
+  <data name="PosAssoluta" xml:space="preserve">
+    <value>PADC</value>
+  </data>
   <data name="Position" xml:space="preserve">
     <value>Posizione</value>
   </data>
@@ -349,7 +352,10 @@
     <value>1) Italiana</value>
   </data>
   <data name="TipoClassificaOpzione2" xml:space="preserve">
-    <value>2) Mondiale</value>
+    <value>2) Francese</value>
+  </data>
+  <data name="TipoClassificaOpzione3" xml:space="preserve">
+    <value>3) Mondiale</value>
   </data>
   <data name="TipoClassificaScelta" xml:space="preserve">
     <value>Scelta:</value>

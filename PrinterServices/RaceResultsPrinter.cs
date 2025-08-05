@@ -35,7 +35,6 @@ namespace PrinterServices
                 string title = BuildTitle(race, category, tipoClassifica);
                 var titlePanel = CreateTitlePanel(title);
                 AnsiConsole.Write(titlePanel);
-                AnsiConsole.WriteLine();
 
                 var table = CreateTable(isSeasonStandings);
                 var pageManagers = GetPageManagers(filteredManagers, currentPage);
@@ -125,7 +124,7 @@ namespace PrinterServices
             {
                 Border = BoxBorder.None,
                 Padding = new Padding(1, 0, 1, 0),
-                //Header = new PanelHeader("[bold yellow]🏁 CLASSIFICA UFFICIALE 🏁[/]", Justify.Center)
+                //Header = new PanelHeader("[bold yellow]PADC = Posizione assoluta di classifica[/]", Justify.Center)
             };
         }
         private Table CreateTable(bool isSeasonStandings)
@@ -134,6 +133,7 @@ namespace PrinterServices
                 .Border(TableBorder.Rounded)
                 .BorderColor(Color.Grey)
                 .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Posizione")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PosAssoluta")}[/]").Centered())
                 .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Manager")}[/]").LeftAligned())
                 .AddColumn(new TableColumn(new Markup($"[bold]{Markup.Escape(_localizationManager.GetString("Nat"))}[/]")
         ).Centered()).AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PosizioneR")}[/]").Centered());
@@ -169,11 +169,12 @@ namespace PrinterServices
 
             for (int i = 0; i < managers.Count; i++)
             {
-                int absolutePosition = startPosition + i + 1;
+                int position = startPosition + i + 1;
                 var manager = managers[i];
 
-                Style rowStyle = GetRowStyle(absolutePosition);
-                string positionMarkup = GetPositionString(absolutePosition);
+                Style rowStyle = GetRowStyle(position);
+                string positionMarkup = GetPositionString(position);
+                var wordAbsPositionPos = new Text(manager.idx.ToString(), rowStyle);
                 string name = FormatName(manager.Name);
 
                 // Controlla se questo pilota deve essere evidenziato
@@ -182,7 +183,7 @@ namespace PrinterServices
                 // Applica l'evidenziazione se necessario
                 string nameMarkup = isHighlighted ?
                     $"[bold red]{name}[/]" :
-                    $"[{(absolutePosition <= 3 ? "bold" : "")}]{name}[/]";
+                    $"[{(position <= 3 ? "bold" : "")}]{name}[/]";
                 string natCode = manager.natCode?.ToUpper() ?? "??";
                 var nationalityCell = new Markup($"[bold]{Markup.Escape(natCode)}[/]", rowStyle);
                 var positionCell = new Markup(positionMarkup);
@@ -201,7 +202,7 @@ namespace PrinterServices
                 var pitStopsBest = new Text(manager.BestPitTime, rowStyle);
 
 
-                table.AddRow( positionCell, nameCell, nationalityCell, posCell, pointsCell, tyreCell, raceTimeCell, 
+                table.AddRow( positionCell, wordAbsPositionPos, nameCell, nationalityCell, posCell, pointsCell, tyreCell, raceTimeCell, 
                     bestLapCell, avgSpeedCell, pitStopsCell, pitStopsBest);
             }
         }

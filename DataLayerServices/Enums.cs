@@ -16,7 +16,7 @@ namespace DataLayerServices
         }
         public enum TipoClassifica
         {
-            it, all
+            it, fr, all
         }
         public enum MainMenuOption
         {

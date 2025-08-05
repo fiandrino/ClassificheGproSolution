@@ -15,7 +15,7 @@ namespace Mariottide
         Enums.MainMenuOption MainMenu();
         Enums.Category SelectCategory();
         void SelectLanguage();
-        Enums.TipoClassifica SelectTipoClassifica();
+        Enums.TipoClassifica GetRankingTypeFromUser();
         void CreateFolder(string folderName);
         void ResetMessage();
         void SaveBBCodeToFiles(string raceBBCode, string seasonBBCode, DbRaceSummary race, Enums.Category category, Enums.TipoClassifica tipoClassifica);

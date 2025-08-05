@@ -54,7 +54,7 @@ namespace Mariottide
                     {
                         case Enums.MainMenuOption.ViewStandings:
                             _token = _reg.ReadToken();
-                            var tipoClassifica = _ui.SelectTipoClassifica();
+                            var tipoClassifica = _ui.GetRankingTypeFromUser();
                             var category = _ui.SelectCategory();
                             await ProcessCategoryData(tipoClassifica, category).ConfigureAwait(false);
                             break;
@@ -95,7 +95,7 @@ namespace Mariottide
                 return;
 
             var (proxRaceDate, prevRaceDate) = _dl.GetRaceDates(dbCalendar.Events);
-            if (proxRaceDate == new DateTime(0001, 01, 01)|| prevRaceDate == new DateTime(0001, 01, 01))
+            if (proxRaceDate == new DateTime(0001, 01, 01) || prevRaceDate == new DateTime(0001, 01, 01))
             {
                 return;
             }

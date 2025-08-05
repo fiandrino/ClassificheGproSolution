@@ -15,6 +15,7 @@ namespace DbServices
             return tipoClassifica switch
             {
                "it" => new DbItalianContext(),
+               "fr" => new DbFranceseContext(),
                "all" => new DbGlobalContext(),
                 _ => throw new ArgumentException("Tipo classifica non supportato")
             };
