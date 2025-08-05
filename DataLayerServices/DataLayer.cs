@@ -21,13 +21,13 @@ namespace DataLayerServices
         }
 
         // Inizializza o aggiorna i dati dell'ufficio (Office) all'inizio o alla fine della stagione
-        // Se la gara corrente è la 1 o la 17, si presume sia l'inizio/fine stagione e si scaricano nuovi dati via API
+        // Se la gara corrente è null o la 17, si presume sia l'inizio/fine stagione e si scaricano nuovi dati via API
         public async Task<DbOffice> InitializeOffice(string tipoClassifica, string token)
         {
             var dbOffice = await _db.ReadOffice(tipoClassifica.ToString()).ConfigureAwait(false);
 
             // Verifica se la gara è la prima o l'ultima della stagione
-            if (dbOffice == null || Convert.ToInt32(dbOffice.RaceNb) == 17 || Convert.ToInt32(dbOffice.RaceNb) == 1)
+            if (dbOffice == null || Convert.ToInt32(dbOffice.RaceNb) == 17)
             {
                 // Autenticazione all'API GPRO con il token fornito
                 _api.Autenticazione(token);
