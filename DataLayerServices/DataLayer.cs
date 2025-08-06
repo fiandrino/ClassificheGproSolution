@@ -140,20 +140,29 @@ namespace DataLayerServices
             // Filtra manager per nazionalità se necessario (es. classifica IT)
             race = FiltraPerNatzionalita(race, tipoClassifica);
 
-            // Ordina i manager secondo la posizione di arrivo in gara
-            race = OrdinaPerPosizioneArrivo(race);
+            #region Da considerare per essere spostato in una classe specifica che descrive uno specifico modo per classificare
 
-            // Recupera i punti stagionali dei manager dal DB
-            var puntiManagersStagione = await _db.SommaPuntiGare(
-                race.Season,
-                category.ToString(),
-                tipoClassifica.ToString());
+                // TODO: Spostare in eventuale classe dedicata
+                // Ordina i manager secondo la posizione di arrivo in gara
+                race = OrdinaPerPosizioneArrivo(race);
 
-            // Assegna i punti della gara attuale e aggiorna i punti totali
-            race = AssegnaPunti(race, Enums.PointSystem.Gpro, puntiManagersStagione);
+                //TODO: Spostare in eventuale classe dedicata
+                // Recupera i punti stagionali dei manager dal DB
+                var puntiManagersStagione = await _db.SommaPuntiGare(
+                        race.Season,
+                        category.ToString(),
+                        tipoClassifica.ToString());
 
-            // Ordina i manager per classifica
-            race = OrdinaPerClassifica(race);
+                //TODO: Spostare in eventuale classe dedicata
+                // Assegna i punti della gara attuale e aggiorna i punti totali
+                race = AssegnaPunti(race, Enums.PointSystem.Gpro, puntiManagersStagione);
+
+                //TODO: Spostare in eventuale classe dedicata
+                // Ordina i manager per classifica
+                race = OrdinaPerClassifica(race);
+
+            #endregion
+
             return race;
         }
 

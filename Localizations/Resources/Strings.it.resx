@@ -132,8 +132,14 @@
   <data name="Circuito" xml:space="preserve">
     <value>CIRCUITO</value>
   </data>
+  <data name="ClassificaArgentina" xml:space="preserve">
+    <value>ARGENTINA</value>
+  </data>
   <data name="ClassificaErrore" xml:space="preserve">
     <value>Scelta non valida. Premere un numero da 1 a 5.</value>
+  </data>
+  <data name="ClassificaFrancese" xml:space="preserve">
+    <value>FRANCESE</value>
   </data>
   <data name="ClassificaIstruzione" xml:space="preserve">
     <value>Premere il numero corrispondente:</value>
@@ -286,16 +292,16 @@
     <value>PIT STOP</value>
   </data>
   <data name="PosAssoluta" xml:space="preserve">
-    <value>PADC</value>
+    <value>C.P</value>
   </data>
   <data name="Position" xml:space="preserve">
     <value>Posizione</value>
   </data>
   <data name="Posizione" xml:space="preserve">
-    <value>POS</value>
+    <value>P</value>
   </data>
   <data name="PosizioneR" xml:space="preserve">
-    <value>POS.R</value>
+    <value>R.P</value>
   </data>
   <data name="PressAnyKey" xml:space="preserve">
     <value>[grey]Premi un tasto per continuare...[/]</value>
@@ -306,11 +312,11 @@
   <data name="PrimoPosto" xml:space="preserve">
     <value>1°</value>
   </data>
-  <data name="Punti" xml:space="preserve">
-    <value>PT</value>
+  <data name="PuntiGara" xml:space="preserve">
+    <value>N.P</value>
   </data>
   <data name="PuntiTotali" xml:space="preserve">
-    <value>TOT</value>
+    <value>T.P</value>
   </data>
   <data name="ReadSavedRace" xml:space="preserve">
     <value>Sto leggendo i dati dell'ultima gara salvata...</value>
@@ -356,6 +362,9 @@
   </data>
   <data name="TipoClassificaOpzione3" xml:space="preserve">
     <value>3) Mondiale</value>
+  </data>
+  <data name="TipoClassificaOpzione4" xml:space="preserve">
+    <value>4) Argentina</value>
   </data>
   <data name="TipoClassificaScelta" xml:space="preserve">
     <value>Scelta:</value>

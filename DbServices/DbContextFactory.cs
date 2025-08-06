@@ -16,6 +16,7 @@ namespace DbServices
             {
                "it" => new DbItalianContext(),
                "fr" => new DbFranceseContext(),
+               "ar" => new DbArgentinaContext(),
                "all" => new DbGlobalContext(),
                 _ => throw new ArgumentException("Tipo classifica non supportato")
             };

@@ -86,7 +86,8 @@ namespace Mariottide
             {
                 { Enums.TipoClassifica.it, "TipoClassificaOpzione1" },
                 { Enums.TipoClassifica.fr, "TipoClassificaOpzione2" },
-                { Enums.TipoClassifica.all, "TipoClassificaOpzione3" }
+                { Enums.TipoClassifica.all, "TipoClassificaOpzione3" },
+                { Enums.TipoClassifica.ar, "TipoClassificaOpzione4" }
             };
 
             // Crea un dizionario: testo localizzato (escapato) -> valore enum

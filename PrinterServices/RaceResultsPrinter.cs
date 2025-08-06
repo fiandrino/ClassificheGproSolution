@@ -15,10 +15,10 @@ namespace PrinterServices
     public class RaceResultsPrinter : IRaceResultPrinter
     {
         private const int PageSize = 25; // Numero di elementi per pagina
-        private readonly ILocalizationManager _localizationManager;
+        private readonly ILocalizationManager _loc;
         public RaceResultsPrinter(ILocalizationManager localizationManager)
         {
-            _localizationManager = localizationManager;
+            _loc = localizationManager;
         }
         public void PrintResults(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica, bool isSeasonStandings = false)
         {
@@ -36,6 +36,19 @@ namespace PrinterServices
                 var titlePanel = CreateTitlePanel(title);
                 AnsiConsole.Write(titlePanel);
 
+                // Aggiunta della leggenda come panel separato
+                var legendPanel = new Panel(new Markup(
+                        $"[italic yellow]LEGENDA:[/] " +
+                        $"[bold]C.P[/] = Category Position, " +
+                        $"[bold]R.P[/] = Race Position, " +
+                        $"[bold]N.P[/] = New Points, " +
+                        $"[bold]T.P[/] = Total Points"))
+                {
+                    Border = BoxBorder.None,
+                    Padding = new Padding(1, 0, 1, 0)
+                };
+                AnsiConsole.Write(legendPanel);
+
                 var table = CreateTable(isSeasonStandings);
                 var pageManagers = GetPageManagers(filteredManagers, currentPage);
 
@@ -47,28 +60,28 @@ namespace PrinterServices
                 var choices = BuildPaginationChoices(currentPage, totalPages);
 
                 var selection = AnsiConsole.Prompt(new SelectionPrompt<string>()
-                        .Title(_localizationManager.GetString("PageNavigation"))
+                        .Title(_loc.GetString("PageNavigation"))
                         .AddChoices(choices));
 
-                if (selection == _localizationManager.GetString("NextPage") && currentPage < totalPages - 1)
+                if (selection == _loc.GetString("NextPage") && currentPage < totalPages - 1)
                 {
                     currentPage++;
                 }
-                else if (selection == _localizationManager.GetString("PreviousPage") && currentPage > 0)
+                else if (selection == _loc.GetString("PreviousPage") && currentPage > 0)
                 {
                     currentPage--;
                 }
-                else if (selection == _localizationManager.GetString("FirstPage") && currentPage > 0)
+                else if (selection == _loc.GetString("FirstPage") && currentPage > 0)
                 {
                     currentPage = 0;
                 }
-                else if (selection == _localizationManager.GetString("LastPage") && currentPage < totalPages - 1)
+                else if (selection == _loc.GetString("LastPage") && currentPage < totalPages - 1)
                 {
                     currentPage = totalPages - 1;
                 }
-                else if (selection == _localizationManager.GetString("SearchDriver"))
+                else if (selection == _loc.GetString("SearchDriver"))
                 {
-                    string driverName = AnsiConsole.Ask<string>($"[yellow]{_localizationManager.GetString("EnterDriverNamePrompt")}:[/] ");
+                    string driverName = AnsiConsole.Ask<string>($"[yellow]{_loc.GetString("EnterDriverNamePrompt")}:[/] ");
                     var foundDrivers = FindDrivers(filteredManagers, driverName);
 
                     if (foundDrivers.Any())
@@ -92,12 +105,12 @@ namespace PrinterServices
                     }
                     else
                     {
-                        AnsiConsole.MarkupLine($"[red]{_localizationManager.GetString("DriverNotFound")}[/]");
+                        AnsiConsole.MarkupLine($"[red]{_loc.GetString("DriverNotFound")}[/]");
                         Console.ReadKey();
                         highlightedDriverIds.Clear();
                     }
                 }
-                else if (selection == _localizationManager.GetString("ExitPagination"))
+                else if (selection == _loc.GetString("ExitPagination"))
                 {
                     break;
                 }
@@ -105,18 +118,20 @@ namespace PrinterServices
         }
         private string BuildTitle(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica)
         {
-            string tclassifica = _localizationManager.GetString(tipoClassifica switch
+            string tclassifica = _loc.GetString(tipoClassifica switch
             {
                 Enums.TipoClassifica.all => "ClassificaMondiale",
                 Enums.TipoClassifica.it => "ClassificaItaliana",
+                Enums.TipoClassifica.fr => "ClassificaFrancese",
+                Enums.TipoClassifica.ar => "ClassificaArgentina",
                 _ => "NessunaClassifica"
             });
 
-            return $"{_localizationManager.GetString("ClassificaStagionale")} [bold]{tclassifica.ToUpper()}[/] " +
-                   $"{_localizationManager.GetString("Categoria")} [bold]{category.ToUpper()}[/] - " +
-                   $"{_localizationManager.GetString("Stagione")} [bold]{race.Season}[/] - " +
-                   $"{_localizationManager.GetString("Gara")} [bold]{race.Race}[/] - " +
-                   $"{_localizationManager.GetString("Circuito")} [bold]({race.TrackName})[/]";
+            return $"{_loc.GetString("ClassificaStagionale")} [bold]{tclassifica.ToUpper()}[/] " +
+                   $"{_loc.GetString("Categoria")} [bold]{category.ToUpper()}[/] - " +
+                   $"{_loc.GetString("Stagione")} [bold]{race.Season}[/] - " +
+                   $"{_loc.GetString("Gara")} [bold]{race.Race}[/] - " +
+                   $"{_loc.GetString("Circuito")} [bold]({race.TrackName})[/]";
         }
         private Panel CreateTitlePanel(string title)
         {
@@ -132,27 +147,28 @@ namespace PrinterServices
             var table = new Table()
                 .Border(TableBorder.Rounded)
                 .BorderColor(Color.Grey)
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Posizione")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PosAssoluta")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Manager")}[/]").LeftAligned())
-                .AddColumn(new TableColumn(new Markup($"[bold]{Markup.Escape(_localizationManager.GetString("Nat"))}[/]")
-        ).Centered()).AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PosizioneR")}[/]").Centered());
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("Posizione")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("PosAssoluta")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("Manager")}[/]").LeftAligned())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("Nat")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("PosizioneR")}[/]").Centered());
 
             if (isSeasonStandings)
             {
-                table.AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PuntiTotali")}[/]").Centered());
+                table.AddColumn(new TableColumn($"[bold]{_loc.GetString("PuntiGara")}[/]").Centered());
+                table.AddColumn(new TableColumn($"[bold]{_loc.GetString("PuntiTotali")}[/]").Centered());
             }
             else
             {
-                table.AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Punti")}[/]").Centered());
+                table.AddColumn(new TableColumn($"[bold]{_loc.GetString("PuntiGara")}[/]").Centered());
             }
 
-            table.AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("Gomme")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("TempoGara")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("GiroVeloce")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("VelocitaMedia")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("PitStop")}[/]").Centered())
-                .AddColumn(new TableColumn($"[bold]{_localizationManager.GetString("BestPitStop")}[/]").Centered());
+            table.AddColumn(new TableColumn($"[bold]{_loc.GetString("Gomme")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("TempoGara")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("GiroVeloce")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("VelocitaMedia")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("PitStop")}[/]").Centered())
+                .AddColumn(new TableColumn($"[bold]{_loc.GetString("BestPitStop")}[/]").Centered());
 
             return table;
         }
@@ -177,22 +193,20 @@ namespace PrinterServices
                 var wordAbsPositionPos = new Text(manager.idx.ToString(), rowStyle);
                 string name = FormatName(manager.Name);
 
-                // Controlla se questo pilota deve essere evidenziato
                 bool isHighlighted = highlightedDriverIds.Contains(manager.idm);
-
-                // Applica l'evidenziazione se necessario
                 string nameMarkup = isHighlighted ?
                     $"[bold red]{name}[/]" :
                     $"[{(position <= 3 ? "bold" : "")}]{name}[/]";
+
                 string natCode = manager.natCode?.ToUpper() ?? "??";
                 var nationalityCell = new Markup($"[bold]{Markup.Escape(natCode)}[/]", rowStyle);
                 var positionCell = new Markup(positionMarkup);
                 var nameCell = new Markup(nameMarkup, rowStyle);
                 var posCell = new Text(manager.Pos, rowStyle);
 
-                var pointsCell = isSeasonStandings
-                    ? new Text(manager.TotPoints.ToString(), rowStyle)
-                    : new Text(manager.Points.ToString(), rowStyle);
+                // MODIFICA QUI: Crea sempre entrambe le celle
+                var totalPointsCell = new Text(manager.TotPoints.ToString(), rowStyle);
+                var racePointsCell = new Text(manager.Points.ToString(), rowStyle);
 
                 var tyreCell = new Text(manager.Tyre, rowStyle);
                 var raceTimeCell = new Text(manager.RaceTime, rowStyle);
@@ -201,9 +215,42 @@ namespace PrinterServices
                 var pitStopsCell = new Text(manager.PitStops, rowStyle);
                 var pitStopsBest = new Text(manager.BestPitTime, rowStyle);
 
-
-                table.AddRow( positionCell, wordAbsPositionPos, nameCell, nationalityCell, posCell, pointsCell, tyreCell, raceTimeCell, 
-                    bestLapCell, avgSpeedCell, pitStopsCell, pitStopsBest);
+                // MODIFICA QUI: Aggiungi le celle in modo condizionale
+                if (isSeasonStandings)
+                {
+                    table.AddRow(
+                        positionCell,
+                        wordAbsPositionPos,
+                        nameCell,
+                        nationalityCell,
+                        posCell,
+                        racePointsCell,    // Punti gara
+                        totalPointsCell,   // Punti totali stagione
+                        tyreCell,
+                        raceTimeCell,
+                        bestLapCell,
+                        avgSpeedCell,
+                        pitStopsCell,
+                        pitStopsBest
+                    );
+                }
+                else
+                {
+                    table.AddRow(
+                        positionCell,
+                        wordAbsPositionPos,
+                        nameCell,
+                        nationalityCell,
+                        posCell,
+                        racePointsCell,    // Solo punti gara
+                        tyreCell,
+                        raceTimeCell,
+                        bestLapCell,
+                        avgSpeedCell,
+                        pitStopsCell,
+                        pitStopsBest
+                    );
+                }
             }
         }
         private Style GetRowStyle(int position)
@@ -220,9 +267,9 @@ namespace PrinterServices
         {
             return position switch
             {
-                1 => $"[gold1 bold]{_localizationManager.GetString("PrimoPosto")}[/]",
-                2 => $"[aqua bold]{_localizationManager.GetString("SecondoPosto")}[/]",
-                3 => $"[sandybrown bold]{_localizationManager.GetString("TerzoPosto")}[/]",
+                1 => $"[gold1 bold]{_loc.GetString("PrimoPosto")}[/]",
+                2 => $"[aqua bold]{_loc.GetString("SecondoPosto")}[/]",
+                3 => $"[sandybrown bold]{_loc.GetString("TerzoPosto")}[/]",
                 _ => $"{position}"
             };
         }
@@ -236,10 +283,10 @@ namespace PrinterServices
         private void AddTableFooter(Table table, int managerCount, int currentPage, int totalPages)
         {
             table.Caption = new TableTitle(
-                $"[grey]{_localizationManager.GetString("LastUpdate")}: {DateTime.Now.ToString("g", CultureInfo.CurrentCulture)} | " +
-                $"{managerCount} {_localizationManager.GetString("Drivers")} | " +
-                $"{_localizationManager.GetString("Page")} {currentPage} {_localizationManager.GetString("Of")} {totalPages} | " +
-                $"{_localizationManager.GetString("Source")}: GPRO[/]");
+                $"[grey]{_loc.GetString("LastUpdate")}: {DateTime.Now.ToString("g", CultureInfo.CurrentCulture)} | " +
+                $"{managerCount} {_loc.GetString("Drivers")} | " +
+                $"{_loc.GetString("Page")} {currentPage} {_loc.GetString("Of")} {totalPages} | " +
+                $"{_loc.GetString("Source")}: GPRO[/]");
         }
         public string DecodeUnicodeEntities(string input)
         {
@@ -269,18 +316,18 @@ namespace PrinterServices
 
             if (currentPage > 0)
             {
-                choices.Add(_localizationManager.GetString("FirstPage"));
-                choices.Add(_localizationManager.GetString("PreviousPage"));
+                choices.Add(_loc.GetString("FirstPage"));
+                choices.Add(_loc.GetString("PreviousPage"));
             }
 
             if (currentPage < totalPages - 1)
             {
-                choices.Add(_localizationManager.GetString("NextPage"));
-                choices.Add(_localizationManager.GetString("LastPage"));
+                choices.Add(_loc.GetString("NextPage"));
+                choices.Add(_loc.GetString("LastPage"));
             }
 
-            choices.Add(_localizationManager.GetString("SearchDriver"));
-            choices.Add(_localizationManager.GetString("ExitPagination"));
+            choices.Add(_loc.GetString("SearchDriver"));
+            choices.Add(_loc.GetString("ExitPagination"));
 
             return choices;
         }
@@ -307,22 +354,22 @@ namespace PrinterServices
         private FoundDriver ShowDriverSelectionMenu(List<FoundDriver> drivers)
         {
             AnsiConsole.Clear();
-            AnsiConsole.Write(new Rule($"[yellow]{_localizationManager.GetString("MultipleDriversFound")}[/]").RuleStyle("grey").Centered());
+            AnsiConsole.Write(new Rule($"[yellow]{_loc.GetString("MultipleDriversFound")}[/]").RuleStyle("grey").Centered());
 
             var choices = drivers.Select(d =>
-                $"{d.Name} - {_localizationManager.GetString("Position")} {d.Position}"
+                $"{d.Name} - {_loc.GetString("Position")} {d.Position}"
             ).ToList();
 
-            choices.Add(_localizationManager.GetString("CancelSelection"));
+            choices.Add(_loc.GetString("CancelSelection"));
 
             var selection = AnsiConsole.Prompt(
                 new SelectionPrompt<string>()
-                    .Title(_localizationManager.GetString("SelectDriverPrompt"))
+                    .Title(_loc.GetString("SelectDriverPrompt"))
                     .PageSize(15)
                     .AddChoices(choices)
             );
 
-            if (selection == _localizationManager.GetString("CancelSelection"))
+            if (selection == _loc.GetString("CancelSelection"))
                 return null;
 
             int selectedIndex = choices.IndexOf(selection);
@@ -340,17 +387,28 @@ namespace PrinterServices
             // Tabella
             sb.AppendLine("[table]");
             sb.AppendLine("[tr]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("Posizione")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("Manager")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("Nat")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("PosizioneR")}[/th]");
-            sb.AppendLine($"[th]{(isSeasonStandings ? _localizationManager.GetString("PuntiTotali") : _localizationManager.GetString("Punti"))}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("Gomme")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("TempoGara")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("GiroVeloce")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("VelocitaMedia")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("PitStop")}[/th]");
-            sb.AppendLine($"[th]{_localizationManager.GetString("BestPitStop")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("Posizione")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("Manager")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("Nat")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("PosizioneR")}[/th]");
+
+            // MODIFICA QUI: Gestione colonne punti
+            if (isSeasonStandings)
+            {
+                sb.AppendLine($"[th]{_loc.GetString("PuntiTotali")}[/th]");
+                sb.AppendLine($"[th]{_loc.GetString("PuntiGara")}[/th]");
+            }
+            else
+            {
+                sb.AppendLine($"[th]{_loc.GetString("Punti")}[/th]");
+            }
+
+            sb.AppendLine($"[th]{_loc.GetString("Gomme")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("TempoGara")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("GiroVeloce")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("VelocitaMedia")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("PitStop")}[/th]");
+            sb.AppendLine($"[th]{_loc.GetString("BestPitStop")}[/th]");
             sb.AppendLine("[/tr]");
 
             int position = 1;
@@ -361,9 +419,9 @@ namespace PrinterServices
                 // Formattazione posizione
                 string positionCell = position switch
                 {
-                    1 => $"[b][color=gold]{_localizationManager.GetString("PrimoPosto")}[/color][/b]",
-                    2 => $"[b][color=aqua]{_localizationManager.GetString("SecondoPosto")}[/color][/b]",
-                    3 => $"[b][color=sandybrown]{_localizationManager.GetString("TerzoPosto")}[/color][/b]",
+                    1 => $"[b][color=gold]{_loc.GetString("PrimoPosto")}[/color][/b]",
+                    2 => $"[b][color=aqua]{_loc.GetString("SecondoPosto")}[/color][/b]",
+                    3 => $"[b][color=sandybrown]{_loc.GetString("TerzoPosto")}[/color][/b]",
                     _ => $"{position}"
                 };
                 sb.AppendLine($"[td]{positionCell}[/td]");
@@ -372,10 +430,20 @@ namespace PrinterServices
                 string name = FormatName(manager.Name);
                 sb.AppendLine($"[td]{name}[/td]");
                 sb.AppendLine($"[td][b]{manager.natCode?.ToUpper() ?? "??"}[/b][/td]");
+                sb.AppendLine($"[td]{manager.Pos}[/td]");
+
+                // MODIFICA QUI: Gestione celle punti
+                if (isSeasonStandings)
+                {
+                    sb.AppendLine($"[td]{manager.TotPoints}[/td]");
+                    sb.AppendLine($"[td]{manager.Points}[/td]");
+                }
+                else
+                {
+                    sb.AppendLine($"[td]{manager.Points}[/td]");
+                }
 
                 // Dati restanti
-                sb.AppendLine($"[td]{manager.Pos}[/td]");
-                sb.AppendLine($"[td]{(isSeasonStandings ? manager.TotPoints : manager.Points)}[/td]");
                 sb.AppendLine($"[td]{manager.Tyre}[/td]");
                 sb.AppendLine($"[td]{manager.RaceTime}[/td]");
                 sb.AppendLine($"[td]{manager.BestLapTime}[/td]");
@@ -391,28 +459,28 @@ namespace PrinterServices
             sb.AppendLine();
 
             // Footer
-            sb.AppendLine($"[size=10][i]{_localizationManager.GetString("LastUpdate")}: {DateTime.Now.ToString("g", CultureInfo.CurrentCulture)} | ");
-            sb.Append($"{filteredManagers.Count} {_localizationManager.GetString("Drivers")} | ");
-            sb.Append($"{_localizationManager.GetString("Source")}: GPRO[/i][/size]");
+            sb.AppendLine($"[size=10][i]{_loc.GetString("LastUpdate")}: {DateTime.Now.ToString("g", CultureInfo.CurrentCulture)} | ");
+            sb.Append($"{filteredManagers.Count} {_loc.GetString("Drivers")} | ");
+            sb.Append($"{_loc.GetString("Source")}: GPRO[/i][/size]");
 
             return sb.ToString();
         }
         private string BuildBBCodeTitle(DbRaceSummary race, string category, Enums.TipoClassifica tipoClassifica)
         {
-            string tclassifica = _localizationManager.GetString(tipoClassifica switch
+            string tclassifica = _loc.GetString(tipoClassifica switch
             {
                 Enums.TipoClassifica.all => "ClassificaMondiale",
                 Enums.TipoClassifica.it => "ClassificaItaliana",
                 _ => "NessunaClassifica"
             });
 
-            return $"{_localizationManager.GetString("ClassificaStagionale")} {tclassifica.ToUpper()} " +
-                   $"{_localizationManager.GetString("Categoria")} {category.ToUpper()} - " +
-                   $"{_localizationManager.GetString("Stagione")} {race.Season} - " +
-                   $"{_localizationManager.GetString("Gara")} {race.Race} - " +
-                   $"{_localizationManager.GetString("Circuito")} ({race.TrackName})";
+            return $"{_loc.GetString("ClassificaStagionale")} {tclassifica.ToUpper()} " +
+                   $"{_loc.GetString("Categoria")} {category.ToUpper()} - " +
+                   $"{_loc.GetString("Stagione")} {race.Season} - " +
+                   $"{_loc.GetString("Gara")} {race.Race} - " +
+                   $"{_loc.GetString("Circuito")} ({race.TrackName})";
         }
-        
+
         private class FoundDriver
         {
             public int Id { get; set; }
