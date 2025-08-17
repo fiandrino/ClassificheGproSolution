@@ -2,6 +2,8 @@
 
 namespace DbServices
 {
+    //TODO: considrare l'uso delle MIgrations
+    //TODO: VAlutare il rifacimento delle tabelle del db per l'uso di un di un db unico per ogni stato
     public class DbGlobalContext : DbContext, IRacingContext
     {
         public DbSet<DbManager> DbManagers { get; set; }

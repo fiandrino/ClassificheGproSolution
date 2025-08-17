@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using ApiServices;
 using DbServices;
 
@@ -82,7 +79,7 @@ namespace DataLayerServices
                 System.Globalization.CultureInfo.InvariantCulture
             );
         }
-        private static  DateTime ConvertToDateTime(string dateString)
+        private static DateTime ConvertToDateTime(string dateString)
         {
             string textContent = Regex.Replace(
                 dateString,

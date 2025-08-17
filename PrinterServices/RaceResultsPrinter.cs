@@ -14,7 +14,7 @@ namespace PrinterServices
 {
     public class RaceResultsPrinter : IRaceResultPrinter
     {
-        private const int PageSize = 25; // Numero di elementi per pagina
+        private const int PageSize = 35; // Numero di elementi per pagina
         private readonly ILocalizationManager _loc;
         public RaceResultsPrinter(ILocalizationManager localizationManager)
         {

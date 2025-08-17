@@ -34,6 +34,7 @@ namespace Mariottide
             _dl = dl;
         }
 
+        //TODO: nuovo tipo di classifica basato sui giri veloci?
         /// <summary>
         /// Avvia il ciclo principale dell'applicazione, mostrando il menu, elaborando i dati 
         /// e gestendo le scelte dell’utente.
@@ -119,10 +120,13 @@ namespace Mariottide
                 return;
             _ptr.PrintResults(race, category.ToString(), tipoClassifica);
             _ptr.PrintResults(race, category.ToString(), tipoClassifica, isSeasonStandings: true);
-            var raceBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica);
-            var seasonBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica, true);
-            // Salva i BBCode su file
-            _ui.SaveBBCodeToFiles(raceBBCODE, seasonBBCODE, race, category, tipoClassifica);
+
+            #region valutare se necessaria la crazione del BBCODE
+                //var raceBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica);
+                //var seasonBBCODE = _ptr.GenerateBBCodeResults(race, category.ToString(), tipoClassifica, true);
+                // Salva i BBCode su file
+                //_ui.SaveBBCodeToFiles(raceBBCODE, seasonBBCODE, race, category, tipoClassifica);
+            #endregion
         }
     }
 }

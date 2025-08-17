@@ -123,6 +123,7 @@ namespace DataLayerServices
         }
 
         // Stabilisce se è necessario scaricare una nuova gara
+        //TODO: Considerare in futuro se è meglio memorizzare data e ora.
         private bool ShouldFetchNewRace(DbRaceSummary race, DateTime? proxRaceDate, DateTime? prevRaceDate)
         {
             return (race == null || !race.Managers.Any()) || ((proxRaceDate > DateTime.Today && prevRaceDate < DateTime.Today && race.Downloaded < prevRaceDate));
@@ -175,7 +176,7 @@ namespace DataLayerServices
         // Elimina i file del database locale se il flag reset è true
         public void DeleteDatabaseFiles(bool reset)
         {
-            var files = new[] { "Global.db", "Italian.db" };
+            var files = new[] { "Global.db", "Italian.db", "Francese.db", "Argentina.Db"};
             if (reset)
             {
                 foreach (var file in files)
